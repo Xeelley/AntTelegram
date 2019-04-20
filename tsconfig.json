@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+      "baseUrl": ".",
+      "paths": { "*": ["types/*"] },
+    "target": "es5",
+    "module": "commonjs",
+    "declaration": true,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "outDir": "dist",
+    "moduleResolution": "node",
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "**/__tests__/*"],
+  "files":   [
+    "lib/index.ts",
+    "lib/t.ts",
+  ],
+}
