@@ -12,6 +12,7 @@ import {
 } from './t';
 
 
+
 export class AntTelegram extends EventEmitter {
     
     public api: TelegramBot;
@@ -32,6 +33,7 @@ export class AntTelegram extends EventEmitter {
     private commands: Commands = {};
     private liveLocationListeners: Function[] = [];
 
+
     /**
      * Create new AntTelegram instance.
      * 
@@ -40,13 +42,14 @@ export class AntTelegram extends EventEmitter {
      */
     constructor(token: string, config: AntTelegramConfig) {
         super();
-
-        this.api = new TelegramBot(token, { polling: true });
         
         if (!config.getStatus) throw new Error('Ant: config.getStatus not provided! This field is mandatory.');
         if (!config.setStatus) throw new Error('Ant: config.setStatus not provided! This field is mandatory.');
         config.maskSeparator = config.maskSeparator || ':'; 
+        config.useWebhook    = config.useWebhook || false;
         this.config = config;
+
+        this.api = new TelegramBot(token, { polling: !this.config.useWebhook });
 
 
         this.api.on('error',         (err: Error) => {
@@ -95,8 +98,8 @@ export class AntTelegram extends EventEmitter {
         return this.config.setStatus(chat_id, status);
     }
 
-    public on(event: AntTelegramEvent, listener: Function): any {
-        return this.on(event, listener);
+    public on(event: AntTelegramEvent, listener: (...args: any[]) => void): any {
+        return super.on(event, listener);
     }
 
     private init() {

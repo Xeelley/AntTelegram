@@ -5,9 +5,29 @@
 <p align="center">
   Tiny but powerful framework for <a href="https://telegram.org/">Telegram</a> chat bots.
 </p>
+<p align="center">
+    <a href="https://core.telegram.org/bots/api">
+        <img src="https://img.shields.io/badge/Bot%20API-v.4.0.0-00aced.svg">
+    </a>
+    <a href="https://www.npmjs.com/package/ant-telegram">
+        <img src="https://img.shields.io/npm/v/ant-telegram.svg">
+    </a>
+</p>
 
 
-## Basic features
+## List of content ##
+
+About:
+- [Basic features](#Basic%20features) 
+- [Instalation](#Instalation) 
+- [Basic usage](#Basic%20usage) 
+- [Ant anatomy](#Ant%20anatomy) 
+- [Inline buttons, callback data handling](#Inline%20buttons,%20callback%20data%20handling)
+- [Webhook and Polling](#Webhook%20and%20Polling)
+- [Examples](#Examples)
+
+
+## Basic features ##
 
 - Status-based user dialog stage managment.
 - Easy-to-use.
@@ -16,13 +36,13 @@
 - w/o functional overkill, nothing extra.
 
 
-## Instalation
+## Instalation ##
 
 - NPM:
 `npm install ant-telegram`
 
 
-## Basic usage
+## Basic usage ##
 
 Ant:Telegram require to provide 2 basic status managment async methods: for getting status to user by telegram `chat_id`, and for setting it.  
 Feel free to chose storing way (architecture, database etc.). We require next interfaces only:
@@ -59,7 +79,7 @@ Your bot ready to start. Run script and make sure it works:
 <img src="assets/chat_01.png" align="center">
 
 
-## Ant anatomy
+## Ant anatomy ##
 
 ### Telegram API 
 
@@ -149,7 +169,7 @@ This code will send text message with two inline buttons:
 <img src="assets/chat_02.png">
 
 
-## Inline button & callback data handling
+## Inline buttons, callback data handling ##
 Using [builders](#Builders) you can define `callback_data` type and data directly (second and third parameter in `Ant.Types.InlineButton`).  
 Example:
 ```js
@@ -174,7 +194,22 @@ Callback will get data from inline buttons with pointed type:
 Knowing it, your both `type` string and `data` must be at total less then **55** characters. API error (`error` event) will return otherwise.
 
 
-## Examples
+## Webhook and Polling ##
+Ant:Telegram use [long-polling](https://en.wikipedia.org/wiki/Push_technology#Long_polling) for communicate with Telegram API by default.  
+If you need use webhook instead of long-polling, follow next steps:
+
+1. Pass `useWebhook` to Ant:Telegram options
+```js
+const Ant = new AntTelegram(token, { useWebhook: true, ... })
+```
+2. Set webhook url using API `setWebHook` method:
+```js
+await Ant.api.setWebHook(url, options)
+```
+Now your webhook is ready to receive incoming messages.
+
+
+## Examples ##
 - [Todo List Bot](examples/todo-list.md) - simple todos manager.
 
 

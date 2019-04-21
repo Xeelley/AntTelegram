@@ -2,6 +2,7 @@ export interface AntTelegramConfig {
     getStatus: (chat_id: Number) => Promise<string>;
     setStatus: (chat_id: Number, status: String) => Promise<any>;
     maskSeparator?: string;
+    useWebhook?: Boolean;
 }
 
 export interface Listeners {
@@ -26,3 +27,4 @@ export interface ListenerCallback {
 export type ListenerType = 'photo'|'message'|'location'|'contact'|'callback_query'|'live_location'|'pre_checkout_query'|'successful_payment';
 
 export type AntTelegramEvent = 'error'|'chat_error'|'webhook_error'|'polling_error'|'Error';
+

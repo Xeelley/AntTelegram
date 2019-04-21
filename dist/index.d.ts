@@ -14,7 +14,7 @@ export declare class AntTelegram extends EventEmitter {
     add(type: ListenerType, status: string, method: ListenerCallback): void;
     command(command: string, method: ListenerCallback): void;
     status(chat_id: Number, status: String): Promise<any>;
-    on(event: AntTelegramEvent, listener: Function): any;
+    on(event: AntTelegramEvent, listener: (...args: any[]) => void): any;
     private init;
     private checkStatus;
     private liveLocationHandler;

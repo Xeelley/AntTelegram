@@ -32,13 +32,14 @@ var AntTelegram = (function (_super) {
         };
         _this.commands = {};
         _this.liveLocationListeners = [];
-        _this.api = new TelegramBot(token, { polling: true });
         if (!config.getStatus)
             throw new Error('Ant: config.getStatus not provided! This field is mandatory.');
         if (!config.setStatus)
             throw new Error('Ant: config.setStatus not provided! This field is mandatory.');
         config.maskSeparator = config.maskSeparator || ':';
+        config.useWebhook = config.useWebhook || false;
         _this.config = config;
+        _this.api = new TelegramBot(token, { polling: !_this.config.useWebhook });
         _this.api.on('error', function (err) {
             _this.emit('error', err);
             _this.emit('Error', err);
@@ -69,7 +70,7 @@ var AntTelegram = (function (_super) {
         return this.config.setStatus(chat_id, status);
     };
     AntTelegram.prototype.on = function (event, listener) {
-        return this.on(event, listener);
+        return _super.prototype.on.call(this, event, listener);
     };
     AntTelegram.prototype.init = function () {
         var _this = this;

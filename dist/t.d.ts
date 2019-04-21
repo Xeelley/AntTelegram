@@ -2,6 +2,7 @@ export interface AntTelegramConfig {
     getStatus: (chat_id: Number) => Promise<string>;
     setStatus: (chat_id: Number, status: String) => Promise<any>;
     maskSeparator?: string;
+    useWebhook?: Boolean;
 }
 export interface Listeners {
     photo: {
