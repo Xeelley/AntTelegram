@@ -27,7 +27,7 @@
 Ant:Telegram require to provide 2 basic status managment async methods: for getting status to user by telegram `chat_id`, and for setting it.  
 Feel free to chose storing way (architecture, database etc.). We require next interfaces only:
 ```ts
-getStatus(chat_id: Number): Promise<string>;
+getStatus(chat_id: Number): Promise<String>;
 setStatus(chat_id: Number, status: String): Promise<any>;
 ``` 
 
@@ -55,12 +55,15 @@ Ant.command('/start', chat_id => {
 ```
 
 Your bot ready to start. Run script and make sure it works:  
+
 <img src="assets/chat_01.png" align="center">
 
 
 ## Ant anatomy
 
-### Telegram API (`Ant.api`)
+### Telegram API 
+
+See `Ant.api`
 
 All api methods like 
 ```ts
@@ -141,7 +144,8 @@ Ant.api.sendMessage(chat_id, 'Am I cool?', Ant.Types.InlineKeyboard([
 ]))
 ```
 Here we are using builders instead of define `option` object.  
-This code will send text message with two inline buttons:
+This code will send text message with two inline buttons:  
+
 <img src="assets/chat_02.png">
 
 
@@ -161,11 +165,17 @@ Ant.add('callback_query', 'gift', (chat_id, data, message_id) => {
     Ant.api.sendMessage(chat_id, `🎁 Here your gift with id=${data.id}`)
 })
 ```
-Callback will get data from inline buttons with pointed type:
+Callback will get data from inline buttons with pointed type:  
+
 <img src="assets/chat_03.png">
+
+**Notice**: Ant:Telegram `Ant.Types.InlineKeyboard` builder add `callback_data` to message.  
+`callback_data` is stringified JSON-string that looks like `{t: type, d: data}` and have 64 character length limit (see [Telegram API docs](https://core.telegram.org/bots/api#inlinekeyboardbutton)).  
+Knowing it, your both `type` string and `data` must be at total less then **55** characters. API error (`error` event) will return otherwise.
 
 
 ## Examples
+- [Todo List Bot](examples/todo-list.md) - simple todos manager.
 
 
 
