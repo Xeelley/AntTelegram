@@ -38,8 +38,10 @@ About:
 
 ## Instalation ##
 
-- NPM:
+- Using [NPM](https://www.npmjs.com/):  
 `npm install ant-telegram`
+- Using [Yarn](https://yarnpkg.com/en/):  
+`yarn add ant-telegram`
 
 
 ## Basic usage ##

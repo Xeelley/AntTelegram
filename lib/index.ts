@@ -3,7 +3,7 @@ process.env.NTBA_FIX_319 = '1';
 
 import { EventEmitter } from 'events';
 import * as TelegramBot from 'node-telegram-bot-api';
-import * as AntTypes from './types';
+import * as AntTypes from './core/types';
 
 import { 
     Listeners, 
@@ -14,7 +14,7 @@ import {
     AntDirectListenerType,
     Commands,
     AntTelegramEvent,
-} from './t';
+} from './core/t';
 
 
 export class AntTelegram extends EventEmitter {
@@ -65,15 +65,9 @@ export class AntTelegram extends EventEmitter {
 
     }
 
-
-    /**
-     * Set new listener of incoming messages
-     * @param {ListenerType}     type   Type of listener. 
-     * @param {string}           status User scenario status for this listener.
-     * @param {ListenerCallback} method Callback that will be invoked when new message of provided type and
-     *                                  on provided scenario status will be recieved.
-     */
-    public add(type: AntListenerType, status: string | ListenerCallback, method: ListenerCallback) {
+    public add(type: 'message', status: string, listener: (chat_id: Number, text: string, message_id: Number) => any): void;
+    public add(type: 'successful_payment', status: string, listener: (chat_id: Number, successful_payment: String) => any): void;
+    public add(type: AntListenerType, status: any, method?: any) {
         if (type === 'live_location' && typeof status === 'function') {
             this.liveLocationListeners.push(status);
         } else {

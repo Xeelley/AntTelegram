@@ -1,3 +1,6 @@
+import * as NTBA from 'node-telegram-bot-api';
+
+
 export interface AntTelegramConfig {
     getStatus: (chat_id: Number) => Promise<string>;
     setStatus: (chat_id: Number, status: String) => Promise<any>;

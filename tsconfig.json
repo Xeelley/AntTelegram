@@ -10,11 +10,6 @@
     "outDir": "dist",
     "moduleResolution": "node",
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "**/__tests__/*"],
-  "files":   [
-    "lib/index.ts",
-    "lib/t.ts",
-    "lib/types.ts",
-  ],
+  "include": ["lib/**/*"],
+  "exclude": ["node_modules"],
 }

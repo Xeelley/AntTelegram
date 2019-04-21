@@ -16,7 +16,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 process.env.NTBA_FIX_319 = '1';
 var events_1 = require("events");
 var TelegramBot = require("node-telegram-bot-api");
-var AntTypes = require("./types");
+var AntTypes = require("./core/types");
 var AntTelegram = (function (_super) {
     __extends(AntTelegram, _super);
     function AntTelegram(token, config) {
