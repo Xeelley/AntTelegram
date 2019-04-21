@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+process.env.NTBA_FIX_319 = '1';
 var events_1 = require("events");
 var TelegramBot = require("node-telegram-bot-api");
 var AntTypes = require("./types");
@@ -21,15 +22,7 @@ var AntTelegram = (function (_super) {
     function AntTelegram(token, config) {
         var _this = _super.call(this) || this;
         _this.Types = AntTypes;
-        _this.botListeners = {
-            photo: {},
-            message: {},
-            location: {},
-            contact: {},
-            callback_query: {},
-            pre_checkout_query: {},
-            successful_payment: {},
-        };
+        _this.botListeners = {};
         _this.commands = {};
         _this.liveLocationListeners = [];
         if (!config.getStatus)
@@ -60,7 +53,9 @@ var AntTelegram = (function (_super) {
             this.liveLocationListeners.push(status);
         }
         else {
-            this.botListeners[type][status] = method;
+            if (!this.botListeners[type])
+                this.botListeners[type] = {};
+            this.botListeners[type][status.toString()] = method;
         }
     };
     AntTelegram.prototype.command = function (command, method) {
@@ -73,8 +68,15 @@ var AntTelegram = (function (_super) {
         return _super.prototype.on.call(this, event, listener);
     };
     AntTelegram.prototype.init = function () {
+        this.addListeners();
+        this.addBasicListeners();
+        this.addDirectListeners();
+    };
+    AntTelegram.prototype.addListeners = function () {
         var _this = this;
         this.api.on('message', function (message) {
+            if (!message.text)
+                return;
             var text = message.text;
             var chatId = message.chat.id;
             var messageId = message.message_id;
@@ -83,21 +85,6 @@ var AntTelegram = (function (_super) {
                 return;
             }
             _this.checkStatus(chatId, 'message', text, messageId);
-        });
-        this.api.on('location', function (message) {
-            var location = message.location;
-            var chatId = message.chat.id;
-            _this.checkStatus(chatId, 'location', location);
-        });
-        this.api.on('photo', function (message) {
-            var photo = message.photo;
-            var chatId = message.chat.id;
-            _this.checkStatus(chatId, 'photo', photo);
-        });
-        this.api.on('contact', function (message) {
-            var chatId = message.chat.id;
-            var contact = message.contact;
-            _this.checkStatus(chatId, 'contact', contact);
         });
         this.api.on('successful_payment', function (data) {
             var chatId = data.from.id;
@@ -121,10 +108,39 @@ var AntTelegram = (function (_super) {
             }).catch(function (err) { return _this.onError(chatId, err); });
         });
         this.api.on('edited_message', function (message) {
-            if (message['location']) {
+            if (message.location) {
                 _this.liveLocationHandler(message);
             }
         });
+    };
+    AntTelegram.prototype.addDirectListeners = function () {
+        var _this = this;
+        var types = [
+            'animation', 'channel_chat_created', 'delete_chat_photo', 'group_chat_created',
+            'left_chat_member', 'migrate_from_chat_id', 'migrate_to_chat_id', 'new_chat_members',
+            'new_chat_photo', 'new_chat_title', 'passport_data', 'pinned_message', 'supergroup_chat_created',
+        ];
+        types.forEach(function (type) {
+            _this.api.on(type, function (message) {
+                var chatId = message.chat ? message.chat.id : null;
+                if (chatId)
+                    _this.checkStatus(chatId, type, message);
+            });
+        }, this);
+    };
+    AntTelegram.prototype.addBasicListeners = function () {
+        var _this = this;
+        var types = [
+            'audio', 'contact', 'document', 'game', 'invoice', 'location', 'photo', 'sticker', 'text',
+            'video', 'video_note', 'voice',
+        ];
+        types.forEach(function (type) {
+            _this.api.on(type, function (message) {
+                var chatId = message.chat.id;
+                var data = message[type];
+                _this.checkStatus(chatId, type, data);
+            });
+        }, this);
     };
     AntTelegram.prototype.checkStatus = function (chat_id, type, data, extra) {
         var _this = this;

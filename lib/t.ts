@@ -6,14 +6,7 @@ export interface AntTelegramConfig {
 }
 
 export interface Listeners {
-    photo:              { [key in string]: Function };
-    message:            { [key in string]: Function };
-    location:           { [key in string]: Function };
-    contact:            { [key in string]: Function };
-    callback_query:     { [key in string]: Function };
-    pre_checkout_query: { [key in string]: Function };
-    successful_payment: { [key in string]: Function };
-    [key: string]:      { [key in string]: Function };
+    [key: string]: { [key in string]: Function };
 }
 
 export interface Commands {
@@ -24,7 +17,47 @@ export interface ListenerCallback {
     (user_id: String | Number, data: any, mask?: String): void;
 }
 
-export type ListenerType = 'photo'|'message'|'location'|'contact'|'callback_query'|'live_location'|'pre_checkout_query'|'successful_payment';
+export type AntModifiedListenerType = 
+'message' |
+'callback_query' |
+'live_location' |
+'pre_checkout_query' |
+'successful_payment';
 
-export type AntTelegramEvent = 'error'|'chat_error'|'webhook_error'|'polling_error'|'Error';
+export type AntBasicListenerType = 
+'photo' |
+'location' |
+'text' |
+'contact' |
+'audio' | 
+'document' | 
+'game' | 
+'invoice' | 
+'sticker' | 
+'video' | 
+'video_note' | 
+'voice';
+
+export type AntDirectListenerType = 
+'animation' |
+'channel_chat_created' |
+'delete_chat_photo' |
+'group_chat_created' |
+'left_chat_member' |
+'migrate_from_chat_id' |
+'migrate_to_chat_id' |
+'new_chat_members' |
+'new_chat_photo' |
+'new_chat_title' |
+'passport_data' |
+'pinned_message' |
+'supergroup_chat_created';
+
+export type AntListenerType = AntModifiedListenerType | AntDirectListenerType | AntBasicListenerType;
+
+export type AntTelegramEvent = 'error' |
+'chat_error' |
+'webhook_error' |
+'polling_error' |
+'Error';
 

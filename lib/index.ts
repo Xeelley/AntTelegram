@@ -1,3 +1,6 @@
+// Remove depracation warnings by node-telegram-bot-api
+process.env.NTBA_FIX_319 = '1';
+
 import { EventEmitter } from 'events';
 import * as TelegramBot from 'node-telegram-bot-api';
 import * as AntTypes from './types';
@@ -6,11 +9,12 @@ import {
     Listeners, 
     AntTelegramConfig,
     ListenerCallback,
-    ListenerType,
+    AntListenerType,
+    AntBasicListenerType,
+    AntDirectListenerType,
     Commands,
     AntTelegramEvent,
 } from './t';
-
 
 
 export class AntTelegram extends EventEmitter {
@@ -21,15 +25,7 @@ export class AntTelegram extends EventEmitter {
     private config: AntTelegramConfig;
 
     
-    private botListeners: Listeners = {
-        photo:              {},
-        message:            {},
-        location:           {},
-        contact:            {},
-        callback_query:     {},
-        pre_checkout_query: {},
-        successful_payment: {},
-    }
+    private botListeners: Listeners = {};
     private commands: Commands = {};
     private liveLocationListeners: Function[] = [];
 
@@ -71,17 +67,18 @@ export class AntTelegram extends EventEmitter {
 
 
     /**
-     * Set new listener of incoming messages from FB
+     * Set new listener of incoming messages
      * @param {ListenerType}     type   Type of listener. 
      * @param {string}           status User scenario status for this listener.
      * @param {ListenerCallback} method Callback that will be invoked when new message of provided type and
      *                                  on provided scenario status will be recieved.
      */
-    public add(type: ListenerType, status: string, method: ListenerCallback) {
+    public add(type: AntListenerType, status: string | ListenerCallback, method: ListenerCallback) {
         if (type === 'live_location' && typeof status === 'function') {
             this.liveLocationListeners.push(status);
         } else {
-            this.botListeners[type][status] = method;
+            if (!this.botListeners[type]) this.botListeners[type] = {};
+            this.botListeners[type][status.toString()] = method;
         }
     }
 
@@ -103,7 +100,14 @@ export class AntTelegram extends EventEmitter {
     }
 
     private init() {
+        this.addListeners();
+        this.addBasicListeners();
+        this.addDirectListeners();
+    }
+
+    private addListeners() {
         this.api.on('message', (message: any) => {
+            if (!message.text) return;
             const text      = message.text;
             const chatId    = message.chat.id;
             const messageId = message.message_id;
@@ -113,24 +117,6 @@ export class AntTelegram extends EventEmitter {
                 return;
             }
             this.checkStatus(chatId, 'message', text, messageId);
-        });
-        this.api.on('location', (message: any) => {
-            const location = message.location;
-            const chatId   = message.chat.id;
-    
-            this.checkStatus(chatId, 'location', location);
-        });
-        this.api.on('photo', (message: any) => {
-            const photo  = message.photo;
-            const chatId = message.chat.id;
-    
-            this.checkStatus(chatId, 'photo', photo);
-        });
-        this.api.on('contact', (message: any) => {
-            const chatId  = message.chat.id;
-            const contact = message.contact;
-    
-            this.checkStatus(chatId, 'contact', contact);
         });
         this.api.on('successful_payment', (data: any) => {
             const chatId  = data.from.id;
@@ -157,12 +143,39 @@ export class AntTelegram extends EventEmitter {
             }).catch((err: Error) => this.onError(chatId, err));
         });
         this.api.on('edited_message', (message: any) => { 
-            if (message['location']) {
+            if (message.location) {
                 this.liveLocationHandler(message);
             }
         });
     }
 
+    private addDirectListeners() {
+        const types: AntDirectListenerType[] = [
+            'animation','channel_chat_created','delete_chat_photo','group_chat_created',
+            'left_chat_member','migrate_from_chat_id','migrate_to_chat_id','new_chat_members',
+            'new_chat_photo','new_chat_title','passport_data','pinned_message','supergroup_chat_created',
+        ]; 
+        types.forEach(type => {
+            this.api.on(type, message => {
+                const chatId = message.chat ? message.chat.id : null;
+                if (chatId) this.checkStatus(chatId, type, message);
+            });
+        }, this)
+    }
+
+    private addBasicListeners() {
+        const types: AntBasicListenerType[] = [
+            'audio','contact','document','game','invoice','location','photo','sticker','text',
+            'video','video_note','voice',
+        ];
+        types.forEach(type => {
+            this.api.on(type, message => {
+                const chatId = message.chat.id;
+                const data = message[type];
+                this.checkStatus(chatId, type, data);
+            });
+        }, this);
+    }
 
     private checkStatus(chat_id: Number, type: string, data: any, extra?: any) {
         this.config.getStatus(chat_id)
