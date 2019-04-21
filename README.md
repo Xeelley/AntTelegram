@@ -1,4 +1,6 @@
-<img src="assets/logo.png" align="center">
+<p align="center">
+    <img src="assets/logo.png" width="300px">
+</p>
 <h2 align="center">Ant:Telegram</h2>
 <p align="center">
   Tiny but powerful framework for <a href="https://telegram.org/">Telegram</a> chat bots.
@@ -46,8 +48,8 @@ Explore quick start [example](docs/mongo-status-exmaple.md) using [MongoDB](http
 Now you ready to use Ant:Telegram.  
 Let's add start dialog handler (`/start` command):
 ```js
-ant.command('/start', chat_id => {
-    ant.bot.sendMessage(chat_id, 'Hi!')
+Ant.command('/start', chat_id => {
+    Ant.bot.sendMessage(chat_id, 'Hi!')
     .catch(err => { ... });
 })
 ```
@@ -68,6 +70,7 @@ Ant.api.deleteChatStickerSet(chat_id: Number, form: TelegramForm): Promise;
 ... and so on. See full list in [node-telegram-bot-api](https://www.npmjs.com/package/node-telegram-bot-api) dependency.
 
 ### Events
+
 ```js
 // Telegram API response errors
 Ant.on('error', err => { ... })
@@ -78,6 +81,12 @@ Ant.on('webhook_error', err => { ... })
 // Errors caused during user's scenario (status errors, access restrictions, ivalid inputs etc.)
 Ant.on('chat_error', (chat_id, err) => { ... })
 ```
+Also Ant:Telegram has `Error` generalization:
+```js
+Ant.on('Error', err => { ... })
+```
+`Error` will fire on any error. If error caused during user's scenario (`chat_error`), error will have `chat_id` extra field.
+
 
 ### Statuses
 
@@ -120,5 +129,44 @@ Ant.add('message', 'buy:fruit:*', (chat_id, text, item) => {
 ```
 Callback will invoke for any text message send by user with any item in status.
 
-### Builders
+### Builders ### 
+See `Ant.Types`
+
+Ant:Telegram simplifies api mothods usage with builders.  
+Let's check an example:
+```js
+Ant.api.sendMessage(chat_id, 'Am I cool?', Ant.Types.InlineKeyboard([
+    [ Ant.Types.InlineButton('Yes, sure!', 'yes') ],
+    [ Ant.Types.InlineButton('No-no-no', 'no') ]
+]))
+```
+Here we are using builders instead of define `option` object.  
+This code will send text message with two inline buttons:
+<img src="assets/chat_02.png">
+
+
+## Inline button & callback data handling
+Using [builders](#Builders) you can define `callback_data` type and data directly (second and third parameter in `Ant.Types.InlineButton`).  
+Example:
+```js
+Ant.api.sendMessage(chat_id, 'Click button below for getting  gift', Ant.Types.InlineKeyboard([
+    [ Ant.Types.InlineButton('Click!', 'gift', { id: 3 }) ],
+]))
+```
+It will send test message with inline button that have `gift` type and data.  
+How to handle it? Use known `Ant.add` handler!
+```js
+Ant.add('callback_query', 'gift', (chat_id, data, message_id) => {
+    console.log(data) // { id: 3 }
+    Ant.api.sendMessage(chat_id, `🎁 Here your gift with id=${data.id}`)
+})
+```
+Callback will get data from inline buttons with pointed type:
+<img src="assets/chat_03.png">
+
+
+## Examples
+
+
+
 

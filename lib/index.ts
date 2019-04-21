@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import * as TelegramBot from 'node-telegram-bot-api';
+import * as AntTypes from './types';
 
 import { 
     Listeners, 
@@ -7,16 +8,14 @@ import {
     ListenerCallback,
     ListenerType,
     Commands,
+    AntTelegramEvent,
 } from './t';
 
 
-/**
- * @fires AntTelegram#error
- * @fires AntTelegram#chat_error
- */
-export default class AntTelegram extends EventEmitter {
+export class AntTelegram extends EventEmitter {
     
     public api: TelegramBot;
+    public Types = AntTypes;
 
     private config: AntTelegramConfig;
 
@@ -39,7 +38,7 @@ export default class AntTelegram extends EventEmitter {
      * @param {String}            token  - Telegram bot token.
      * @param {AntTelegramConfig} config 
      */
-    constructor(token: String, config: AntTelegramConfig) {
+    constructor(token: string, config: AntTelegramConfig) {
         super();
 
         this.api = new TelegramBot(token, { polling: true });
@@ -49,13 +48,22 @@ export default class AntTelegram extends EventEmitter {
         config.maskSeparator = config.maskSeparator || ':'; 
         this.config = config;
 
-        this.api.on('error',         (err: Error) => this.emit('error', err));
-        this.api.on('polling_error', (err: Error) => this.emit('polling_error', err));
-        this.api.on('webhook_error', (err: Error) => this.emit('webhook_error', err));
+
+        this.api.on('error',         (err: Error) => {
+            this.emit('error', err);
+            this.emit('Error', err);
+        });
+        this.api.on('polling_error', (err: Error) => {
+            this.emit('polling_error', err);
+            this.emit('Error', err);
+        });
+        this.api.on('webhook_error', (err: Error) => {
+            this.emit('webhook_error', err);
+            this.emit('Error', err);
+        });
 
         this.init();
 
-        // setInterval(() => console.log(this.botListeners), 5000)
     }
 
 
@@ -85,6 +93,10 @@ export default class AntTelegram extends EventEmitter {
 
     public status(chat_id: Number, status: String): Promise<any> {
         return this.config.setStatus(chat_id, status);
+    }
+
+    public on(event: AntTelegramEvent, listener: Function): any {
+        return this.on(event, listener);
     }
 
     private init() {
@@ -136,8 +148,8 @@ export default class AntTelegram extends EventEmitter {
             const messageId = query.message.message_id;
     
             this.api.answerCallbackQuery(query.id, { show_alert: true }).then(() => {
-                if (!!~Object.keys(this.botListeners.callback_query).indexOf(data.type)) {
-                    this.botListeners.callback_query[data.type](chatId, data.data, messageId);
+                if (!!~Object.keys(this.botListeners.callback_query).indexOf(data.t)) {
+                    this.botListeners.callback_query[data.t](chatId, data.d, messageId);
                 }
             }).catch((err: Error) => this.onError(chatId, err));
         });
@@ -175,6 +187,7 @@ export default class AntTelegram extends EventEmitter {
 
     private onError(id: String | Number, err: Error) {
         this.emit('chat_error', id, err);
+        this.emit('Error', Object.assign(err, { chat_id: id }));
     }
 
     private isMask(mask: String): Boolean {

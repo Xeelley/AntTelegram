@@ -15,10 +15,12 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var events_1 = require("events");
 var TelegramBot = require("node-telegram-bot-api");
+var AntTypes = require("./types");
 var AntTelegram = (function (_super) {
     __extends(AntTelegram, _super);
     function AntTelegram(token, config) {
         var _this = _super.call(this) || this;
+        _this.Types = AntTypes;
         _this.botListeners = {
             photo: {},
             message: {},
@@ -37,9 +39,18 @@ var AntTelegram = (function (_super) {
             throw new Error('Ant: config.setStatus not provided! This field is mandatory.');
         config.maskSeparator = config.maskSeparator || ':';
         _this.config = config;
-        _this.api.on('error', function (err) { return _this.emit('error', err); });
-        _this.api.on('polling_error', function (err) { return _this.emit('error', err); });
-        _this.api.on('webhook_error', function (err) { return _this.emit('error', err); });
+        _this.api.on('error', function (err) {
+            _this.emit('error', err);
+            _this.emit('Error', err);
+        });
+        _this.api.on('polling_error', function (err) {
+            _this.emit('polling_error', err);
+            _this.emit('Error', err);
+        });
+        _this.api.on('webhook_error', function (err) {
+            _this.emit('webhook_error', err);
+            _this.emit('Error', err);
+        });
         _this.init();
         return _this;
     }
@@ -56,6 +67,9 @@ var AntTelegram = (function (_super) {
     };
     AntTelegram.prototype.status = function (chat_id, status) {
         return this.config.setStatus(chat_id, status);
+    };
+    AntTelegram.prototype.on = function (event, listener) {
+        return this.on(event, listener);
     };
     AntTelegram.prototype.init = function () {
         var _this = this;
@@ -100,8 +114,8 @@ var AntTelegram = (function (_super) {
             var chatId = query.message.chat.id;
             var messageId = query.message.message_id;
             _this.api.answerCallbackQuery(query.id, { show_alert: true }).then(function () {
-                if (!!~Object.keys(_this.botListeners.callback_query).indexOf(data.type)) {
-                    _this.botListeners.callback_query[data.type](chatId, data.data, messageId);
+                if (!!~Object.keys(_this.botListeners.callback_query).indexOf(data.t)) {
+                    _this.botListeners.callback_query[data.t](chatId, data.d, messageId);
                 }
             }).catch(function (err) { return _this.onError(chatId, err); });
         });
@@ -137,6 +151,7 @@ var AntTelegram = (function (_super) {
     };
     AntTelegram.prototype.onError = function (id, err) {
         this.emit('chat_error', id, err);
+        this.emit('Error', Object.assign(err, { chat_id: id }));
     };
     AntTelegram.prototype.isMask = function (mask) {
         return mask.split(this.config.maskSeparator).includes('*');
@@ -164,4 +179,4 @@ var AntTelegram = (function (_super) {
     };
     return AntTelegram;
 }(events_1.EventEmitter));
-exports.default = AntTelegram;
+exports.AntTelegram = AntTelegram;

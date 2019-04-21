@@ -36,4 +36,4 @@ export interface ListenerCallback {
     (user_id: String | Number, data: any, mask?: String): void;
 }
 export declare type ListenerType = 'photo' | 'message' | 'location' | 'contact' | 'callback_query' | 'live_location' | 'pre_checkout_query' | 'successful_payment';
-export declare type AntTelegramEvent = 'error' | 'chat_error';
+export declare type AntTelegramEvent = 'error' | 'chat_error' | 'webhook_error' | 'polling_error' | 'Error';

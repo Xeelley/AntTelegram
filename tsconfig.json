@@ -15,5 +15,6 @@
   "files":   [
     "lib/index.ts",
     "lib/t.ts",
+    "lib/types.ts",
   ],
 }

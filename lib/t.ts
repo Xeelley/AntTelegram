@@ -25,4 +25,4 @@ export interface ListenerCallback {
 
 export type ListenerType = 'photo'|'message'|'location'|'contact'|'callback_query'|'live_location'|'pre_checkout_query'|'successful_payment';
 
-export type AntTelegramEvent = 'error'|'chat_error';
+export type AntTelegramEvent = 'error'|'chat_error'|'webhook_error'|'polling_error'|'Error';
