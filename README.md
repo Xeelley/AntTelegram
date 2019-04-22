@@ -10,6 +10,9 @@
         <img src="https://img.shields.io/badge/Bot%20API-v.4.0.0-00aced.svg">
     </a>
     <a href="https://www.npmjs.com/package/ant-telegram">
+        <img src="https://img.shields.io/node/v/ant-telegram.svg">
+    </a>
+    <a href="https://www.npmjs.com/package/ant-telegram">
         <img src="https://img.shields.io/npm/v/ant-telegram.svg">
     </a>
     <a href="https://travis-ci.org/Xeelley/AntTelegram">
@@ -73,9 +76,8 @@ Explore quick start [example](docs/mongo-status-exmaple.md) using [MongoDB](http
 Now you ready to use Ant:Telegram.  
 Let's add start dialog handler (`/start` command):
 ```js
-Ant.command('/start', chat_id => {
-    Ant.bot.sendMessage(chat_id, 'Hi!')
-    .catch(err => { ... });
+Ant.command('/start', async chat_id => {
+    await Ant.bot.sendMessage(chat_id, 'Hi!');
 })
 ```
 
@@ -120,7 +122,7 @@ Ant.on('Error', err => { ... })
 
 Set status for user:
 ```js
-Ant.status(id, 'my_status').then(...).catch(...)
+await Ant.status(id, 'my_status');
 ```
 
 And add listener for this status: 
@@ -145,7 +147,7 @@ Callback will invoke every time when user send this command to chat. Status will
 You can use multi-leveled statuses using level separator (`:` by default). It can be changed using `maskSeparator` field in initial config.   
 For example: 
 ```js
-Ant.status(chat_id, 'buy:fruit:apple')
+await Ant.status(chat_id, 'buy:fruit:apple')
 ```
 Provided status has 3 levels: action (`buy`), category (`fruit`), item (`apple`) and can be used during user interaction  with shopping cart.  
 You not need to set listeners using `Ant.add` for each item on third level. You can use mask (`*`):
@@ -163,7 +165,7 @@ See `Ant.Types`
 Ant:Telegram simplifies api mothods usage with builders.  
 Let's check an example:
 ```js
-Ant.api.sendMessage(chat_id, 'Am I cool?', Ant.Types.InlineKeyboard([
+await Ant.api.sendMessage(chat_id, 'Am I cool?', Ant.Types.InlineKeyboard([
     [ Ant.Types.InlineButton('Yes, sure!', 'yes') ],
     [ Ant.Types.InlineButton('No-no-no', 'no') ]
 ]))
@@ -178,16 +180,16 @@ This code will send text message with two inline buttons:
 Using [builders](#Builders) you can define `callback_data` type and data directly (second and third parameter in `Ant.Types.InlineButton`).  
 Example:
 ```js
-Ant.api.sendMessage(chat_id, 'Click button below for getting  gift', Ant.Types.InlineKeyboard([
+await Ant.api.sendMessage(chat_id, 'Click button below for getting  gift', Ant.Types.InlineKeyboard([
     [ Ant.Types.InlineButton('Click!', 'gift', { id: 3 }) ],
 ]))
 ```
 It will send test message with inline button that have `gift` type and data.  
 How to handle it? Use known `Ant.add` handler!
 ```js
-Ant.add('callback_query', 'gift', (chat_id, data, message_id) => {
+Ant.add('callback_query', 'gift', async (chat_id, data, message_id) => {
     console.log(data) // { id: 3 }
-    Ant.api.sendMessage(chat_id, `🎁 Here your gift with id=${data.id}`)
+    await Ant.api.sendMessage(chat_id, `🎁 Here your gift with id=${data.id}`)
 })
 ```
 Callback will get data from inline buttons with pointed type:  

@@ -1,7 +1,7 @@
 ### Step-by-step start with MongoDB.
 
 1. Install mongoose:  
-`npm i -g mongoose`
+`npm i -s mongoose`
 
 2. Define status model:
 ```js
@@ -9,13 +9,13 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema({
     user_id: {
-        type: String,
+        type: Number,
         require: true,
         unique: true,
     },
     status: {
         type: String,
-    }
+    },
 }, { collection: 'statuses' });
 
 const Status = mongoose.model('Status', Schema);
@@ -41,7 +41,7 @@ const setStatus = (user_id, status) => {
 const getStatus = user_id => {
     return new Promise((resolve, reject) => {
         Status.findOne({ user_id })
-        .then(res => res ? resolve(res.status) : reject(new Error('Status not found')))
+        .then(res => resolve(res ? res.status : null))
         .catch(err => reject(err));
     });
 }

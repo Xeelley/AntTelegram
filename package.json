@@ -1,11 +1,14 @@
 {
   "name": "ant-telegram",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "AntTelegram: small but poweful framework for telegram bots.",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc"
+  },
+  "engines": {
+    "node": ">=6.17.1"
   },
   "repository": {
     "type": "git",

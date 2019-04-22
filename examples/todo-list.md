@@ -45,7 +45,7 @@ Ant.command('/start', showMenu);
 
 // Open menu selection
 Ant.add('message', 'menu', (chat_id, text) => {
-    if (text === '➕ Add card') return askCardName(chat_id);
+    if (text === '➕ Add card')   return askCardName(chat_id);
     if (text === '📜 Show cards') return showCardList(chat_id);
 })
 
