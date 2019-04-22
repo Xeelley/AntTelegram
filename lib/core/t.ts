@@ -52,6 +52,11 @@ export type AntDirectListenerType =
 'new_chat_members' |
 'new_chat_photo' |
 'new_chat_title' |
+'shipping_query' |
+'inline_query' |
+'edited_message' |
+'edited_message_text' |
+'edited_message_caption' |
 'passport_data' |
 'pinned_message' |
 'supergroup_chat_created';

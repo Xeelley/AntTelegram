@@ -1,73 +1,59 @@
 // Remove depracation warnings by node-telegram-bot-api
 process.env.NTBA_FIX_319 = '1';
 
-import { EventEmitter } from 'events';
-import * as TelegramBot from 'node-telegram-bot-api';
-import * as AntTypes from './core/types';
-
-import { 
-    Listeners, 
-    AntTelegramConfig,
-    ListenerCallback,
-    AntListenerType,
-    AntBasicListenerType,
-    AntDirectListenerType,
-    Commands,
-    AntTelegramEvent,
-} from './core/t';
+import * as T from './core/t';
+import { AntCore } from './core/AntCore';
+import * as Telegram from 'node-telegram-bot-api';
 
 
-export class AntTelegram extends EventEmitter {
-    
-    public api: TelegramBot;
-    public Types = AntTypes;
+export class AntTelegram extends AntCore {
 
-    private config: AntTelegramConfig;
-
-    
-    private botListeners: Listeners = {};
-    private commands: Commands = {};
-    private liveLocationListeners: Function[] = [];
-
-
-    /**
-     * Create new AntTelegram instance.
-     * 
-     * @param {String}            token  - Telegram bot token.
-     * @param {AntTelegramConfig} config 
-     */
-    constructor(token: string, config: AntTelegramConfig) {
-        super();
-        
-        if (!config.getStatus) throw new Error('Ant: config.getStatus not provided! This field is mandatory.');
-        if (!config.setStatus) throw new Error('Ant: config.setStatus not provided! This field is mandatory.');
-        config.maskSeparator = config.maskSeparator || ':'; 
-        config.useWebhook    = config.useWebhook || false;
-        this.config = config;
-
-        this.api = new TelegramBot(token, { polling: !this.config.useWebhook });
-
-
-        this.api.on('error',         (err: Error) => {
-            this.emit('error', err);
-            this.emit('Error', err);
-        });
-        this.api.on('polling_error', (err: Error) => {
-            this.emit('polling_error', err);
-            this.emit('Error', err);
-        });
-        this.api.on('webhook_error', (err: Error) => {
-            this.emit('webhook_error', err);
-            this.emit('Error', err);
-        });
-
-        this.init();
-
+    constructor(token: string, config: T.AntTelegramConfig) {
+        super(token, config);
     }
 
+
     public add(type: 'message', status: string, listener: (chat_id: Number, text: string, message_id: Number) => any): void;
-    public add(type: 'successful_payment', status: string, listener: (chat_id: Number, successful_payment: String) => any): void;
-    public add(type: AntListenerType, status: any, method?: any) {
+    public add(type: 'successful_payment', status: string, listener: (chat_id: Number, successful_payment: Telegram.SuccessfulPayment, mask?: String) => any): void;
+    public add(type: 'pre_checkout_query', status: string, listener: (chat_id: Number, successful_payment: Telegram.PreCheckoutQuery, mask?: String) => any): void;
+    public add(type: 'callback_query', status: string, listener: (chat_id: Number, data: any, message_id: Number) => any): void;
+    
+    public add(type: 'animation', status: string, listener: (chat_id: Number, message: Telegram.Message, mask?: String) => any): void;
+    public add(type: 'channel_chat_created', status: string, listener: (chat_id: Number, message: Telegram.Message, mask?: String) => any): void;
+    public add(type: 'delete_chat_photo', status: string, listener: (chat_id: Number, message: Telegram.Message, mask?: String) => any): void;
+    public add(type: 'group_chat_created', status: string, listener: (chat_id: Number, message: Telegram.Message, mask?: String) => any): void;
+    public add(type: 'left_chat_member', status: string, listener: (chat_id: Number, message: Telegram.Message, mask?: String) => any): void;
+    public add(type: 'migrate_from_chat_id', status: string, listener: (chat_id: Number, message: Telegram.Message, mask?: String) => any): void;
+    public add(type: 'migrate_to_chat_id', status: string, listener: (chat_id: Number, message: Telegram.Message, mask?: String) => any): void;
+    public add(type: 'new_chat_members', status: string, listener: (chat_id: Number, message: Telegram.Message, mask?: String) => any): void;
+    public add(type: 'new_chat_photo', status: string, listener: (chat_id: Number, message: Telegram.Message, mask?: String) => any): void;
+    public add(type: 'new_chat_title', status: string, listener: (chat_id: Number, message: Telegram.Message, mask?: String) => any): void;
+    public add(type: 'edited_message', status: string, listener: (chat_id: Number, message: Telegram.Message, mask?: String) => any): void;
+    public add(type: 'edited_message_text', status: string, listener: (chat_id: Number, message: Telegram.Message, mask?: String) => any): void;
+    public add(type: 'edited_message_caption', status: string, listener: (chat_id: Number, message: Telegram.Message, mask?: String) => any): void;
+    public add(type: 'passport_data', status: string, listener: (chat_id: Number, message: Telegram.Message, mask?: String) => any): void;
+    public add(type: 'pinned_message', status: string, listener: (chat_id: Number, message: Telegram.Message, mask?: String) => any): void;
+    public add(type: 'supergroup_chat_created', status: string, listener: (chat_id: Number, message: Telegram.Message, mask?: String) => any): void;
+    public add(type: 'shipping_query', status: string, listener: (chat_id: Number, query: Telegram.ShippingQuery, mask?: String) => any): void;
+    public add(type: 'inline_query', status: string, listener: (chat_id: Number, query: Telegram.InlineQuery, mask?: String) => any): void;
+
+    public add(type: 'live_location', listener: (chat_id: Number, location: Telegram.Location) => any): void;
+
+    public add(type: 'audio', status: string, listener: (chat_id: Number, audio: Telegram.Audio, mask?: String) => any): void;
+    public add(type: 'contact', status: string, listener: (chat_id: Number, contact: Telegram.Contact, mask?: String) => any): void;
+    public add(type: 'document', status: string, listener: (chat_id: Number, document: Telegram.Document, mask?: String) => any): void;
+    public add(type: 'game', status: string, listener: (chat_id: Number, game: Telegram.Game, mask?: String) => any): void;
+    public add(type: 'invoice', status: string, listener: (chat_id: Number, invoice: Telegram.Invoice, mask?: String) => any): void;
+    public add(type: 'location', status: string, listener: (chat_id: Number, location: Telegram.Location, mask?: String) => any): void;
+    public add(type: 'photo', status: string, listener: (chat_id: Number, photo: Telegram.PhotoSize[], mask?: String) => any): void;
+    public add(type: 'sticker', status: string, listener: (chat_id: Number, sticker: Telegram.Sticker, mask?: String) => any): void;
+    public add(type: 'text', status: string, listener: (chat_id: Number, text: String, mask?: String) => any): void;
+    public add(type: 'video', status: string, listener: (chat_id: Number, video: Telegram.Video, mask?: String) => any): void;
+    public add(type: 'video_note', status: string, listener: (chat_id: Number, video_note: Telegram.Video, mask?: String) => any): void;
+    public add(type: 'voice', status: string, listener: (chat_id: Number, voice: Telegram.Voice, mask?: String) => any): void;
+
+    public add(type: T.AntListenerType, status: any, method?: any) {
+    
         if (type === 'live_location' && typeof status === 'function') {
             this.liveLocationListeners.push(status);
         } else {
@@ -75,154 +61,4 @@ export class AntTelegram extends EventEmitter {
             this.botListeners[type][status.toString()] = method;
         }
     }
-
-    /**
-     * Set new listener of incoming chat commands from Tg
-     * @param {string}           command Command (with '/')
-     * @param {ListenerCallback} method  Callback that will be invoked when new provided command will be recieved.
-     */
-    public command(command: string, method: ListenerCallback) {
-        this.commands[command] = method;
-    }
-
-    public status(chat_id: Number, status: String): Promise<any> {
-        return this.config.setStatus(chat_id, status);
-    }
-
-    public on(event: AntTelegramEvent, listener: (...args: any[]) => void): any {
-        return super.on(event, listener);
-    }
-
-    private init() {
-        this.addListeners();
-        this.addBasicListeners();
-        this.addDirectListeners();
-    }
-
-    private addListeners() {
-        this.api.on('message', (message: any) => {
-            if (!message.text) return;
-            const text      = message.text;
-            const chatId    = message.chat.id;
-            const messageId = message.message_id;
-    
-            if (Object.keys(this.commands).includes(text)) {
-                this.commands[text](chatId, message);
-                return;
-            }
-            this.checkStatus(chatId, 'message', text, messageId);
-        });
-        this.api.on('successful_payment', (data: any) => {
-            const chatId  = data.from.id;
-            const payment = data.successful_payment;
-    
-            this.checkStatus(chatId, 'successful_payment', payment);
-        });
-        this.api.on('pre_checkout_query', (query: any) => {
-            const chatId = query.from.id;
-    
-            this.api.answerPreCheckoutQuery(query.id, true, null).then(() => {
-                this.checkStatus(chatId, 'pre_checkout_query', query);
-            }).catch((err: Error) => this.onError(chatId, err));
-        });
-        this.api.on('callback_query', (query: any) => {
-            const data      = JSON.parse(query.data);
-            const chatId    = query.message.chat.id;
-            const messageId = query.message.message_id;
-    
-            this.api.answerCallbackQuery(query.id, { show_alert: true }).then(() => {
-                if (!!~Object.keys(this.botListeners.callback_query).indexOf(data.t)) {
-                    this.botListeners.callback_query[data.t](chatId, data.d, messageId);
-                }
-            }).catch((err: Error) => this.onError(chatId, err));
-        });
-        this.api.on('edited_message', (message: any) => { 
-            if (message.location) {
-                this.liveLocationHandler(message);
-            }
-        });
-    }
-
-    private addDirectListeners() {
-        const types: AntDirectListenerType[] = [
-            'animation','channel_chat_created','delete_chat_photo','group_chat_created',
-            'left_chat_member','migrate_from_chat_id','migrate_to_chat_id','new_chat_members',
-            'new_chat_photo','new_chat_title','passport_data','pinned_message','supergroup_chat_created',
-        ]; 
-        types.forEach(type => {
-            this.api.on(type, message => {
-                const chatId = message.chat ? message.chat.id : null;
-                if (chatId) this.checkStatus(chatId, type, message);
-            });
-        }, this)
-    }
-
-    private addBasicListeners() {
-        const types: AntBasicListenerType[] = [
-            'audio','contact','document','game','invoice','location','photo','sticker','text',
-            'video','video_note','voice',
-        ];
-        types.forEach(type => {
-            this.api.on(type, message => {
-                const chatId = message.chat.id;
-                const data = message[type];
-                this.checkStatus(chatId, type, data);
-            });
-        }, this);
-    }
-
-    private checkStatus(chat_id: Number, type: string, data: any, extra?: any) {
-        this.config.getStatus(chat_id)
-        .then(status => {
-            if (Object.keys(this.botListeners[type]).includes(status)) {
-                return this.botListeners[type][status](chat_id, data, extra);
-            } else {
-                for (let i in Object.keys(this.botListeners[type])) {
-                    const listener = Object.keys(this.botListeners[type])[i];
-                    if (this.isMask(listener) && this.isMatch(status, listener)) {
-                        return this.botListeners[type][listener](chat_id, data, this.isMatch(status, listener));
-                    }
-                }
-            }
-        })
-        .catch((err: Error) => this.onError(chat_id, err));
-    }
-
-    private liveLocationHandler(message: any) {
-        const chatId = message.chat.id;
-        this.liveLocationListeners.forEach((listener: ListenerCallback) => {
-            return listener(chatId, message.location);
-        }, this);
-    } 
-
-    private onError(id: String | Number, err: Error) {
-        this.emit('chat_error', id, err);
-        this.emit('Error', Object.assign(err, { chat_id: id }));
-    }
-
-    private isMask(mask: String): Boolean {
-        return mask.split(this.config.maskSeparator).includes('*');
-    }
-
-    private isMatch(status: String, mask: String) {
-        if (mask === '*') return status;
-
-        const statusLevels = status.split(this.config.maskSeparator);
-        const maskLevels   = mask.split(this.config.maskSeparator);
-        let   maskMatch;
-        if (maskLevels.length !== statusLevels.length) {
-            return null;
-        }
-        for (let i = 0; i < maskLevels.length; i++) {
-            if (maskLevels[i] !== '*') {
-                if (maskLevels[i] !== statusLevels[i]) {
-                    return null;
-                }
-            } else {
-                maskMatch = statusLevels[i];
-            }
-        }
-        return maskMatch;
-    }
-
 }

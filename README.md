@@ -12,6 +12,9 @@
     <a href="https://www.npmjs.com/package/ant-telegram">
         <img src="https://img.shields.io/npm/v/ant-telegram.svg">
     </a>
+    <a href="https://travis-ci.org/Xeelley/AntTelegram">
+        <img src="https://travis-ci.org/Xeelley/AntTelegram.svg?branch=master">
+    </a>
 </p>
 
 
@@ -55,9 +58,9 @@ setStatus(chat_id: Number, status: String): Promise<any>;
 
 Just put in on Ant:Telegram initialization with [telegram bot token](https://core.telegram.org/bots#3-how-do-i-create-a-bot):
 ```js
-const AntTelegram = require('../dist').AntTelegram;
+const { AntTelegram } = require('ant-telegram');
 
-const token = '...';
+const token = '...'; // Your telegram bot token
 
 const Ant = new AntTelegram(token, { 
     getStatus: (chat_id) => { ... }, 
