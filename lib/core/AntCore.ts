@@ -139,6 +139,7 @@ export class AntCore extends EventEmitter {
     private checkStatus(chat_id: Number, type: string, data: any, extra?: any) {
         this.config.getStatus(chat_id)
         .then(status => {
+            if (!status) return;
             if (Object.keys(this.botListeners[type]).includes(status)) {
                 return this.botListeners[type][status](chat_id, data, extra);
             } else {

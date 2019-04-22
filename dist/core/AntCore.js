@@ -137,6 +137,8 @@ var AntCore = (function (_super) {
         var _this = this;
         this.config.getStatus(chat_id)
             .then(function (status) {
+            if (!status)
+                return;
             if (Object.keys(_this.botListeners[type]).includes(status)) {
                 return _this.botListeners[type][status](chat_id, data, extra);
             }
