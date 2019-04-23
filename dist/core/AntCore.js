@@ -139,6 +139,7 @@ var AntCore = (function (_super) {
             .then(function (status) {
             if (!status)
                 return;
+            _this.botListeners[type] = _this.botListeners[type] || {};
             if (Object.keys(_this.botListeners[type]).includes(status)) {
                 return _this.botListeners[type][status](chat_id, data, extra);
             }
