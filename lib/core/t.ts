@@ -1,4 +1,4 @@
-import * as NTBA from 'node-telegram-bot-api';
+import * as Telegram from 'node-telegram-bot-api';
 
 
 export interface AntTelegramConfig {
@@ -18,6 +18,10 @@ export interface Commands {
 
 export interface ListenerCallback {
     (user_id: String | Number, data: any, mask?: String): void;
+}
+
+export interface CommandCallback {
+    (user_id: String | Number, params: { [index: string]: string }, message: Telegram.Message): void;
 }
 
 export type AntModifiedListenerType = 

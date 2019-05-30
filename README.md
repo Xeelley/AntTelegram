@@ -137,10 +137,21 @@ Full list of available types and callbacks you can check [here](docs/event-types
 
 Add command handlers using `Ant.command`:
 ```js
-Ant.command(command, (chat_id, message) => { ... })
+Ant.command(command, (chat_id, params, message) => { ... })
 ```
 Command may contain `/` if needed (example: `/start`).
-Callback will invoke every time when user send this command to chat. Status will be ignored (works with any user's status).
+Callback will invoke every time when user send this command to chat. Status will be ignored (works with any user's status).  
+  
+`Ant.command` support url params for commant that will returns as `params` in callback. Empty object will returns if params not provided.  
+For example:
+| User input | `params` value |
+|---|---|
+| `/cmd` | `{}` |
+| `/cmd?item=apple&amount=2` | `{ item: 'apple', amount: '2' }` |
+
+Notice: all param values are strings. You need to parse params by youself if you need to support other types in command params.  
+
+`message` is native API response (see [Telegram.Message](https://core.telegram.org/bots/api#message)).
 
 ### Masks 
 

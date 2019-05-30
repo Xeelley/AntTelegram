@@ -5,6 +5,8 @@ import * as AntTypes from './types';
 
 import * as T from './t';
 
+import { CommandParser } from '../utils/CommandParser';
+
 
 export class AntCore extends EventEmitter {
     
@@ -48,7 +50,7 @@ export class AntCore extends EventEmitter {
 
     }
 
-    public command(command: string, method: T.ListenerCallback) {
+    public command(command: string, method: T.CommandCallback) {
         this.commands[command] = method;
     }
 
@@ -71,10 +73,13 @@ export class AntCore extends EventEmitter {
             if (!message.text) return;
             const text      = message.text;
             const chatId    = message.chat.id;
-            const messageId = message.message_id;
+            const messageId = message.message_id; 
+
+            const command = text.indexOf('?') !== -1 ?
+                text.slice(0, text.indexOf('?')) : text;
     
-            if (Object.keys(this.commands).includes(text)) {
-                this.commands[text](chatId, message);
+            if (Object.keys(this.commands).includes(command)) {
+                this.commands[command](chatId, CommandParser.parse(text), message);
                 return;
             }
             this.checkStatus(chatId, 'message', text, messageId);

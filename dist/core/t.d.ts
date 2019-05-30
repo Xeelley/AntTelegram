@@ -1,3 +1,4 @@
+import * as Telegram from 'node-telegram-bot-api';
 export interface AntTelegramConfig {
     getStatus: (chat_id: Number) => Promise<string>;
     setStatus: (chat_id: Number, status: String) => Promise<any>;
@@ -14,6 +15,11 @@ export interface Commands {
 }
 export interface ListenerCallback {
     (user_id: String | Number, data: any, mask?: String): void;
+}
+export interface CommandCallback {
+    (user_id: String | Number, params: {
+        [index: string]: string;
+    }, message: Telegram.Message): void;
 }
 export declare type AntModifiedListenerType = 'message' | 'callback_query' | 'live_location' | 'pre_checkout_query' | 'successful_payment';
 export declare type AntBasicListenerType = 'photo' | 'location' | 'text' | 'contact' | 'audio' | 'document' | 'game' | 'invoice' | 'sticker' | 'video' | 'video_note' | 'voice';

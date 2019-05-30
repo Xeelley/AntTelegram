@@ -16,6 +16,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var events_1 = require("events");
 var Telegram = require("node-telegram-bot-api");
 var AntTypes = require("./types");
+var CommandParser_1 = require("../utils/CommandParser");
 var AntCore = (function (_super) {
     __extends(AntCore, _super);
     function AntCore(token, config) {
@@ -69,8 +70,10 @@ var AntCore = (function (_super) {
             var text = message.text;
             var chatId = message.chat.id;
             var messageId = message.message_id;
-            if (Object.keys(_this.commands).includes(text)) {
-                _this.commands[text](chatId, message);
+            var command = text.indexOf('?') !== -1 ?
+                text.slice(0, text.indexOf('?')) : text;
+            if (Object.keys(_this.commands).includes(command)) {
+                _this.commands[command](chatId, CommandParser_1.CommandParser.parse(text), message);
                 return;
             }
             _this.checkStatus(chatId, 'message', text, messageId);
