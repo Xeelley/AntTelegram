@@ -24,12 +24,13 @@
 ## List of content ##
 
 About:
-- [Basic features](#Basic%20features) 
+- [Basic features](#Basic-features) 
 - [Instalation](#Instalation) 
-- [Basic usage](#Basic%20usage) 
-- [Ant anatomy](#Ant%20anatomy) 
-- [Inline buttons, callback data handling](#Inline%20buttons,%20callback%20data%20handling)
-- [Webhook and Polling](#Webhook%20and%20Polling)
+- [Basic usage](#Basic-usage) 
+- [Ant anatomy](#Ant-anatomy) 
+- [Inline buttons, callback data handling](#inline-buttons-callback-data-handling)
+- [Config](#Config)
+- [Webhook and Polling](#Webhook-and-Polling)
 - [Examples](#Examples)
 
 
@@ -71,7 +72,7 @@ const Ant = new AntTelegram(token, {
 });
 ```
 
-Explore quick start [example](docs/mongo-status-exmaple.md) using [MongoDB](https://www.mongodb.com/) + [mongoose](https://www.npmjs.com/package/mongoose).
+Explore quick start [example](docs/mongo-status-example.md) using [MongoDB](https://www.mongodb.com/) + [mongoose](https://www.npmjs.com/package/mongoose).
 
 Now you ready to use Ant:Telegram.  
 Let's add start dialog handler (`/start` command):
@@ -173,7 +174,7 @@ Callback will invoke for any text message send by user with any item in status.
 ### Builders ### 
 See `Ant.Types`
 
-Ant:Telegram simplifies api mothods usage with builders.  
+Ant:Telegram simplifies api methods usage with builders.  
 Let's check an example:
 ```js
 await Ant.api.sendMessage(chat_id, 'Am I cool?', Ant.Types.InlineKeyboard([
@@ -181,7 +182,7 @@ await Ant.api.sendMessage(chat_id, 'Am I cool?', Ant.Types.InlineKeyboard([
     [ Ant.Types.InlineButton('No-no-no', 'no') ]
 ]))
 ```
-Here we are using builders instead of define `option` object.  
+Here we are using builders instead of define `options` object.  
 This code will send text message with two inline buttons:  
 
 <img src="assets/chat_02.png">
@@ -191,7 +192,7 @@ This code will send text message with two inline buttons:
 Using [builders](#Builders) you can define `callback_data` type and data directly (second and third parameter in `Ant.Types.InlineButton`).  
 Example:
 ```js
-await Ant.api.sendMessage(chat_id, 'Click button below for getting  gift', Ant.Types.InlineKeyboard([
+await Ant.api.sendMessage(chat_id, 'Click button below for getting gift', Ant.Types.InlineKeyboard([
     [ Ant.Types.InlineButton('Click!', 'gift', { id: 3 }) ],
 ]))
 ```
@@ -210,6 +211,18 @@ Callback will get data from inline buttons with pointed type:
 **Notice**: Ant:Telegram `Ant.Types.InlineKeyboard` builder add `callback_data` to message.  
 `callback_data` is stringified JSON-string that looks like `{t: type, d: data}` and have 64 character length limit (see [Telegram API docs](https://core.telegram.org/bots/api#inlinekeyboardbutton)).  
 Knowing it, your both `type` string and `data` must be at total less then **55** characters. API error (`error` event) will return otherwise.
+
+
+## Config ##
+Ant:Telegram init config contain next fields:
+
+| field | type | description |
+|-------|------|-------------|
+| `setStatus` | | See [basic usage](#Basic-usage) 
+| `getStatus` | | See [basic usage](#Basic-usage) 
+| `maskSeparator` | `string` | See [masks](#Masks)
+| `useWebhook` | `boolean` | See [webhook and polling](#Webhook-and-Polling) 
+
 
 
 ## Webhook and Polling ##
