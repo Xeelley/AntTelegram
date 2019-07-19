@@ -144,9 +144,10 @@ Command may contain `/` if needed (example: `/start`).
 Callback will invoke every time when user send this command to chat. Status will be ignored (works with any user's status).  
   
 `Ant.command` support url params for commant that will returns as `params` in callback. Empty object will returns if params not provided.  
-For example:
+For example:  
+
 | User input | `params` value |
-|---|---|
+|------------|----------------|
 | `/cmd` | `{}` |
 | `/cmd?item=apple&amount=2` | `{ item: 'apple', amount: '2' }` |
 
