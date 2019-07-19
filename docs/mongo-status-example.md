@@ -25,7 +25,7 @@ const Status = mongoose.model('Status', Schema);
 ```js
 const setStatus = (user_id, status) => {
     return new Promise((resolve, reject) => {
-        Status.findOne({ user_id: id }).then(res => {
+        Status.findOne({ user_id }).then(res => {
             if (res) {
                 res.status = status;
                 res.save(err => err ? reject(err) : resolve());

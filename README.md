@@ -177,9 +177,9 @@ See `Ant.Types`
 Ant:Telegram simplifies api methods usage with builders.  
 Let's check an example:
 ```js
-await Ant.api.sendMessage(chat_id, 'Am I cool?', Ant.Types.InlineKeyboard([
-    [ Ant.Types.InlineButton('Yes, sure!', 'yes') ],
-    [ Ant.Types.InlineButton('No-no-no', 'no') ]
+await Ant.api.sendMessage(chat_id, 'Am I cool?', new Ant.Types.InlineKeyboard([
+    [ new Ant.Types.InlineButton('Yes, sure!', 'yes') ],
+    [ new Ant.Types.InlineButton('No-no-no', 'no') ]
 ]))
 ```
 Here we are using builders instead of define `options` object.  
