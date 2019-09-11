@@ -19,6 +19,7 @@ export class AntCore extends EventEmitter {
     protected botListeners: T.Listeners = {};
     protected commands: T.Commands = {};
     protected liveLocationListeners: Function[] = [];
+    protected startCommandListeners: T.StartCommandCallback[] = [];
 
 
     constructor(token: string, config: T.AntTelegramConfig) {
@@ -54,6 +55,10 @@ export class AntCore extends EventEmitter {
         this.commands[command] = method;
     }
 
+    public onStart(method: T.StartCommandCallback) {
+        this.startCommandListeners.push(method);
+    }
+
     public status(chat_id: Number, status: String): Promise<any> {
         return this.config.setStatus(chat_id, status);
     }
@@ -79,8 +84,10 @@ export class AntCore extends EventEmitter {
                 text.slice(0, text.indexOf('?')) : text;
     
             if (Object.keys(this.commands).includes(command)) {
-                this.commands[command](chatId, CommandParser.parse(text), message);
-                return;
+                return this.commands[command](chatId, CommandParser.parse(text), message);
+            } 
+            if (text.slice(0, 6) === '/start') {
+                return this.startCommandHandler(message);
             }
             this.checkStatus(chatId, 'message', text, messageId);
         });
@@ -167,6 +174,10 @@ export class AntCore extends EventEmitter {
             return listener(chatId, message.location);
         }, this);
     } 
+
+    private startCommandHandler(message: Telegram.Message) {
+        this.startCommandListeners.forEach(listener => listener(message.chat.id, message.text.slice(7), message));
+    }
 
     private onError(id: String | Number, err: Error) {
         this.emit('chat_error', id, err);

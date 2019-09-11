@@ -75,11 +75,19 @@ const Ant = new AntTelegram(token, {
 Explore quick start [example](docs/mongo-status-example.md) using [MongoDB](https://www.mongodb.com/) + [mongoose](https://www.npmjs.com/package/mongoose).
 
 Now you ready to use Ant:Telegram.  
-Let's add start dialog handler (`/start` command):
+Let's add start dialog handler (`/start` command):  
+  
+... using command handlers:
 ```js
 Ant.command('/start', async chat_id => {
     await Ant.bot.sendMessage(chat_id, 'Hi!');
 })
+```
+... or `onStart` method:
+```js
+Ant.onStart((chat_id, value, message) => {
+    await Ant.bot.sendMessage(chat_id, 'Hi!');
+});
 ```
 
 Your bot ready to start. Run script and make sure it works:  
@@ -151,9 +159,28 @@ For example:
 | `/cmd` | `{}` |
 | `/cmd?item=apple&amount=2` | `{ item: 'apple', amount: '2' }` |
 
-Notice: all param values are strings. You need to parse params by youself if you need to support other types in command params.  
+**Notice:** all param values are strings. You need to parse params by youself if you need to support other types in command params.  
 
 `message` is native API response (see [Telegram.Message](https://core.telegram.org/bots/api#message)).
+
+**Notice:** `/start` command using [deep linking](https://core.telegram.org/bots#deep-linking) with params will send message not in url format, so you need to use `Ant.onStart` method to handle it.  
+For example: 
+```js
+/**
+ * @description
+ * Link t.me/yourbot?start=reflink 
+ * will send message "/start reflink"
+ * which isn't in url format. So you need to use method below.
+ */
+Ant.onStart((chat_id, value, message) => {
+    console.log(value); // -> reflink
+});
+```
+| Link | `value` |
+|------|---------|
+| t.me/yourbot | `""` |
+| t.me/yourbot?start=reflink | `"reflink"` |
+
 
 ### Masks 
 

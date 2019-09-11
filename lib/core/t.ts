@@ -24,6 +24,10 @@ export interface CommandCallback {
     (user_id: String | Number, params: { [index: string]: string }, message: Telegram.Message): void;
 }
 
+export interface StartCommandCallback {
+    (user_id: String | Number, value: string, message: Telegram.Message): void;
+}
+
 export type AntModifiedListenerType = 
 'message' |
 'callback_query' |
