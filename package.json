@@ -1,6 +1,6 @@
 {
   "name": "ant-telegram",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "AntTelegram: small but poweful framework for telegram bots.",
   "main": "dist/index.js",
   "scripts": {
@@ -27,9 +27,7 @@
   },
   "homepage": "https://github.com/Xeelley/AntTelegram#readme",
   "dependencies": {
-    "node-telegram-bot-api": "^0.30.0"
-  },
-  "devDependencies": {
+    "node-telegram-bot-api": "^0.30.0",
     "@types/node": "^11.13.6",
     "@types/node-telegram-bot-api": "^0.30.4"
   }
