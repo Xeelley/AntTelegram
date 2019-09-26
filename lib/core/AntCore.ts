@@ -12,9 +12,8 @@ export class AntCore extends EventEmitter {
     
     public api: Telegram;
     public Types = AntTypes;
-
+    
     private config: T.AntTelegramConfig;
-
     
     protected botListeners: T.Listeners = {};
     protected commands: T.Commands = {};
@@ -59,7 +58,7 @@ export class AntCore extends EventEmitter {
         this.startCommandListeners.push(method);
     }
 
-    public status(chat_id: Number, status: String): Promise<any> {
+    public status(chat_id: number, status: string): Promise<any> {
         return this.config.setStatus(chat_id, status);
     }
 
@@ -148,7 +147,7 @@ export class AntCore extends EventEmitter {
         }, this);
     }
 
-    private checkStatus(chat_id: Number, type: string, data: any, extra?: any) {
+    private checkStatus(chat_id: number, type: string, data: any, extra?: any) {
         this.config.getStatus(chat_id)
         .then(status => {
             if (!status) return;

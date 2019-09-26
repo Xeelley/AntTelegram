@@ -16,5 +16,8 @@ class AntTelegram extends AntCore_1.AntCore {
             this.botListeners[type][status.toString()] = method;
         }
     }
+    sendMessage(chatId, text, options) {
+        return this.api.sendMessage(chatId, text, options);
+    }
 }
 exports.AntTelegram = AntTelegram;

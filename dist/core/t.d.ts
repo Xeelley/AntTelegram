@@ -1,7 +1,7 @@
 import * as Telegram from 'node-telegram-bot-api';
 export interface AntTelegramConfig {
-    getStatus: (chat_id: Number) => Promise<string>;
-    setStatus: (chat_id: Number, status: String) => Promise<any>;
+    getStatus: (chat_id: number) => Promise<string>;
+    setStatus: (chat_id: number, status: string) => Promise<any>;
     maskSeparator?: string;
     useWebhook?: Boolean;
 }
@@ -14,15 +14,15 @@ export interface Commands {
     [key: string]: Function;
 }
 export interface ListenerCallback {
-    (user_id: String | Number, data: any, mask?: String): void;
+    (user_id: string | number, data: any, mask?: string): void;
 }
 export interface CommandCallback {
-    (user_id: String | Number, params: {
+    (user_id: string | number, params: {
         [index: string]: string;
     }, message: Telegram.Message): void;
 }
 export interface StartCommandCallback {
-    (user_id: String | Number, value: string, message: Telegram.Message): void;
+    (user_id: string | number, value: string, message: Telegram.Message): void;
 }
 export declare type AntModifiedListenerType = 'message' | 'callback_query' | 'live_location' | 'pre_checkout_query' | 'successful_payment';
 export declare type AntBasicListenerType = 'photo' | 'location' | 'text' | 'contact' | 'audio' | 'document' | 'game' | 'invoice' | 'sticker' | 'video' | 'video_note' | 'voice';

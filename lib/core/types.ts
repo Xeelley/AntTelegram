@@ -1,10 +1,9 @@
-
-interface TelegramInlineButton {
+export interface TelegramInlineButton {
     text: String;
     callback_data: String;
 }
 
-interface TelegramRequestContactButton {
+export interface TelegramRequestContactButton {
     text: String;
     request_contact?: Boolean;
 }
@@ -15,13 +14,13 @@ type TelegramInlineKeyboardMarkup = TelegramInlineButton[][];
 
 type TelegramKeyboardMarkup = String[][];
 
-interface TelegramReplyMarkup {
+export interface TelegramReplyMarkup {
     keyboard?: TelegramKeyboardMarkup;
     inline_keyboard?: TelegramInlineKeyboardMarkup;
     resize_keyboard?: Boolean;
 }
 
-interface TelegramKeyboard {
+export interface TelegramKeyboard {
     reply_markup: TelegramReplyMarkup;
     parse_mode?: TelegramParseMode;
 }
@@ -33,21 +32,21 @@ interface TelegramKeyboard {
  * Outer methods below
  */
 
-function InlineButton(text: String, type: String, data: any): TelegramInlineButton {
+export function InlineButton(text: String, type: String, data: any): TelegramInlineButton {
     return {
         text,
         callback_data: JSON.stringify({ t: type, d: data }),
     }
 }
 
-function RequestContactButton(text: String): TelegramRequestContactButton {
+export function RequestContactButton(text: String): TelegramRequestContactButton {
     return { 
         text,
         request_contact: true,
     }
 }
 
-function Keyboard(keyboard: TelegramKeyboardMarkup, parse_mode: TelegramParseMode = 'Markdown'): TelegramKeyboard {
+export function Keyboard(keyboard: TelegramKeyboardMarkup, parse_mode: TelegramParseMode = 'Markdown'): TelegramKeyboard {
     const result: TelegramKeyboard = {
         reply_markup: { keyboard, resize_keyboard: true },
     };
@@ -55,7 +54,7 @@ function Keyboard(keyboard: TelegramKeyboardMarkup, parse_mode: TelegramParseMod
     return result;
 }
 
-function InlineKeyboard(inline_keyboard: TelegramInlineKeyboardMarkup, parse_mode: TelegramParseMode = 'Markdown'): TelegramKeyboard {
+export function InlineKeyboard(inline_keyboard: TelegramInlineKeyboardMarkup, parse_mode: TelegramParseMode = 'Markdown'): TelegramKeyboard {
     const result: TelegramKeyboard = {
         reply_markup: { inline_keyboard, resize_keyboard: true },
     };
@@ -64,12 +63,7 @@ function InlineKeyboard(inline_keyboard: TelegramInlineKeyboardMarkup, parse_mod
 }
 
 
-export {
-    InlineButton,
-    RequestContactButton,
-    Keyboard,
-    InlineKeyboard,
-}
+
 
 
 

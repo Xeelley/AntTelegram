@@ -2,8 +2,8 @@ import * as Telegram from 'node-telegram-bot-api';
 
 
 export interface AntTelegramConfig {
-    getStatus: (chat_id: Number) => Promise<string>;
-    setStatus: (chat_id: Number, status: String) => Promise<any>;
+    getStatus: (chat_id: number) => Promise<string>;
+    setStatus: (chat_id: number, status: string) => Promise<any>;
     maskSeparator?: string;
     useWebhook?: Boolean;
 }
@@ -17,15 +17,15 @@ export interface Commands {
 }
 
 export interface ListenerCallback {
-    (user_id: String | Number, data: any, mask?: String): void;
+    (user_id: string | number, data: any, mask?: string): void;
 }
 
 export interface CommandCallback {
-    (user_id: String | Number, params: { [index: string]: string }, message: Telegram.Message): void;
+    (user_id: string | number, params: { [index: string]: string }, message: Telegram.Message): void;
 }
 
 export interface StartCommandCallback {
-    (user_id: String | Number, value: string, message: Telegram.Message): void;
+    (user_id: string | number, value: string, message: Telegram.Message): void;
 }
 
 export type AntModifiedListenerType = 
