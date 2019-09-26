@@ -205,7 +205,7 @@ See `Ant.Types`
 Ant:Telegram simplifies api methods usage with builders.  
 Let's check an example:
 ```js
-await Ant.api.sendMessage(chat_id, 'Am I cool?', new Ant.Types.InlineKeyboard([
+await Ant.sendMessage(chat_id, 'Am I cool?', new Ant.Types.InlineKeyboard([
     [ new Ant.Types.InlineButton('Yes, sure!', 'yes') ],
     [ new Ant.Types.InlineButton('No-no-no', 'no') ]
 ]))
@@ -214,6 +214,8 @@ Here we are using builders instead of define `options` object.
 This code will send text message with two inline buttons:  
 
 <img src="assets/chat_02.png">
+
+**Notice:** if you are working in [Typescript](https://www.typescriptlang.org/) environment you need to use `Ant.sendMessage` method (outside `api`). In javascript project feel free to use either `Ant.sendMessage` or `Ant.api.sendMessage`.
 
 
 ## Inline buttons, callback data handling ##
