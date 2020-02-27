@@ -114,13 +114,13 @@ class AntCore extends events_1.EventEmitter {
     addBasicListeners() {
         const types = [
             'audio', 'contact', 'document', 'game', 'invoice', 'location', 'photo', 'sticker', 'text',
-            'video', 'video_note', 'voice',
+            'video', 'video_note', 'voice'
         ];
         types.forEach(type => {
-            this.api.on(type, message => {
+            this.api.on(type, (message) => {
                 const chatId = message.chat.id;
-                const data = message[type];
-                this.checkStatus(chatId, type, data);
+                const data = type !== '*' ? message[type] : null;
+                this.checkStatus(chatId, type, data, message);
             });
         }, this);
     }
@@ -129,6 +129,10 @@ class AntCore extends events_1.EventEmitter {
             .then(status => {
             if (!status)
                 return;
+            this.botListeners['*'] = this.botListeners['*'] || {};
+            if (Object.keys(this.botListeners['*']).includes(status)) {
+                this.botListeners['*'][status](extra);
+            }
             this.botListeners[type] = this.botListeners[type] || {};
             if (Object.keys(this.botListeners[type]).includes(status)) {
                 return this.botListeners[type][status](chat_id, data, extra);

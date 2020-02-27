@@ -54,6 +54,8 @@ export class AntTelegram extends AntCore {
     public add(type: 'video_note', status: string, listener: (chat_id: number, video_note: Telegram.Video, mask?: string) => any): void;
     public add(type: 'voice', status: string, listener: (chat_id: number, voice: Telegram.Voice, mask?: string) => any): void;
 
+    public add(type: '*', status: string, listener: (message: Telegram.Message) => any): void;
+
     public add(type: T.AntListenerType, status: any, method?: any) {
     
         if (type === 'live_location' && typeof status === 'function') {

@@ -40,5 +40,6 @@ export declare class AntTelegram extends AntCore {
     add(type: 'video', status: string, listener: (chat_id: number, video: Telegram.Video, mask?: string) => any): void;
     add(type: 'video_note', status: string, listener: (chat_id: number, video_note: Telegram.Video, mask?: string) => any): void;
     add(type: 'voice', status: string, listener: (chat_id: number, voice: Telegram.Voice, mask?: string) => any): void;
+    add(type: '*', status: string, listener: (message: Telegram.Message) => any): void;
     sendMessage(chatId: number | string, text: string, options?: TelegramBot.SendMessageOptions | TelegramKeyboard): any;
 }

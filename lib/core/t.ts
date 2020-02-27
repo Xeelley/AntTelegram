@@ -36,6 +36,7 @@ export type AntModifiedListenerType =
 'successful_payment';
 
 export type AntBasicListenerType = 
+'*' | 
 'photo' |
 'location' |
 'text' |
@@ -46,7 +47,7 @@ export type AntBasicListenerType =
 'invoice' | 
 'sticker' | 
 'video' | 
-'video_note' | 
+'video_note' |
 'voice';
 
 export type AntDirectListenerType = 

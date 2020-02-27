@@ -29,6 +29,7 @@ About:
 - [Basic usage](#Basic-usage) 
 - [Ant anatomy](#Ant-anatomy) 
 - [Inline buttons, callback data handling](#inline-buttons-callback-data-handling)
+- [Wildcards](#Wildcards)
 - [Config](#Config)
 - [Webhook and Polling](#Webhook-and-Polling)
 - [Examples](#Examples)
@@ -241,6 +242,20 @@ Callback will get data from inline buttons with pointed type:
 **Notice**: Ant:Telegram `Ant.Types.InlineKeyboard` builder add `callback_data` to message.  
 `callback_data` is stringified JSON-string that looks like `{t: type, d: data}` and have 64 character length limit (see [Telegram API docs](https://core.telegram.org/bots/api#inlinekeyboardbutton)).  
 Knowing it, your both `type` string and `data` must be at total less then **55** characters. API error (`error` event) will return otherwise.
+
+
+## Wildcards
+Ant:Telegram support next wildcards:
+
+### Type wildcard
+You can set wildcard listener for provided status using `*` that will be called after each user's message (type doesn't matter).  
+Native API message (`Telegram.Message`) will be passed as parameter.  
+Let's check an example:
+```js
+Ant.add('*', 'your_status', message => {
+    console.log(message) // Telegram.Message here!
+})
+```
 
 
 ## Config ##

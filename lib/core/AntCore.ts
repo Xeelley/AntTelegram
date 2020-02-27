@@ -136,13 +136,13 @@ export class AntCore extends EventEmitter {
     private addBasicListeners() {
         const types: T.AntBasicListenerType[] = [
             'audio','contact','document','game','invoice','location','photo','sticker','text',
-            'video','video_note','voice',
+            'video','video_note','voice'
         ];
         types.forEach(type => {
-            this.api.on(type, message => {
+            this.api.on(<any>type, (message: Telegram.Message) => {
                 const chatId = message.chat.id;
-                const data = message[type];
-                this.checkStatus(chatId, type, data);
+                const data = type !== '*' ? message[type] : null;
+                this.checkStatus(chatId, type, data, message);
             });
         }, this);
     }
@@ -151,6 +151,12 @@ export class AntCore extends EventEmitter {
         this.config.getStatus(chat_id)
         .then(status => {
             if (!status) return;
+
+            // wildcard
+            this.botListeners['*'] = this.botListeners['*'] || {};
+            if (Object.keys(this.botListeners['*']).includes(status)) {
+                this.botListeners['*'][status](<Telegram.Message>extra);
+            }
 
             this.botListeners[type] = this.botListeners[type] || {}; 
             if (Object.keys(this.botListeners[type]).includes(status)) {
