@@ -154,7 +154,7 @@ export class AntCore extends EventEmitter {
 
             // wildcard
             this.botListeners['*'] = this.botListeners['*'] || {};
-            if (Object.keys(this.botListeners['*']).includes(status)) {
+            if (Object.keys(this.botListeners['*']).includes(status) && typeof extra === 'object') {
                 this.botListeners['*'][status](<Telegram.Message>extra);
             }
 

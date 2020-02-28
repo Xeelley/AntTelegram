@@ -130,7 +130,7 @@ class AntCore extends events_1.EventEmitter {
             if (!status)
                 return;
             this.botListeners['*'] = this.botListeners['*'] || {};
-            if (Object.keys(this.botListeners['*']).includes(status)) {
+            if (Object.keys(this.botListeners['*']).includes(status) && typeof extra === 'object') {
                 this.botListeners['*'][status](extra);
             }
             this.botListeners[type] = this.botListeners[type] || {};
