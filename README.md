@@ -7,7 +7,7 @@
 </p>
 <p align="center">
     <a href="https://core.telegram.org/bots/api">
-        <img src="https://img.shields.io/badge/Bot%20API-v.4.0.0-00aced.svg">
+        <img src="https://img.shields.io/badge/Bot%20API-v4.4.0-00aced.svg">
     </a>
     <a href="https://www.npmjs.com/package/ant-telegram">
         <img src="https://img.shields.io/node/v/ant-telegram.svg">
