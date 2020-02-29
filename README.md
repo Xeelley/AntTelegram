@@ -61,6 +61,8 @@ getStatus(chat_id: Number): Promise<String>;
 setStatus(chat_id: Number, status: String): Promise<any>;
 ``` 
 
+**Notice**: `getStatus` must returns `null` or `undefined` when called for user for a first time (when user not exist and status not found).
+
 Just put in on Ant:Telegram initialization with [telegram bot token](https://core.telegram.org/bots#3-how-do-i-create-a-bot):
 ```js
 const { AntTelegram } = require('ant-telegram');
