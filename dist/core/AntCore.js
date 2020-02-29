@@ -77,12 +77,22 @@ class AntCore extends events_1.EventEmitter {
             }).catch((err) => this.onError(query.from.id, err));
         });
         this.api.on('callback_query', (query) => {
-            const data = JSON.parse(query.data);
-            this.api.answerCallbackQuery(query.id, { show_alert: true }).then(() => {
-                if (!!~Object.keys(this.botListeners.callback_query).indexOf(data.t)) {
-                    this.botListeners.callback_query[data.t](query.message.chat.id, data.d, query.message.message_id);
-                }
-            }).catch((err) => this.onError(query.message.chat.id, err));
+            let data;
+            try {
+                data = JSON.parse(query.data);
+                if (typeof data !== 'object' || !data.t || !data.d)
+                    throw new Error();
+            }
+            catch (_) {
+                data = null;
+            }
+            if (data) {
+                this.api.answerCallbackQuery(query.id, { show_alert: true }).then(() => {
+                    if (!!~Object.keys(this.botListeners.callback_query).indexOf(data.t)) {
+                        this.botListeners.callback_query[data.t](query.message.chat.id, data.d, query.message.message_id);
+                    }
+                }).catch((err) => this.onError(query.message.chat.id, err));
+            }
         });
         this.api.on('inline_query', (query) => {
             this.checkStatus(query.from.id, 'inline_query', query.query);

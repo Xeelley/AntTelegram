@@ -241,7 +241,9 @@ Callback will get data from inline buttons with pointed type:
 
 **Notice**: Ant:Telegram `Ant.Types.InlineKeyboard` builder add `callback_data` to message.  
 `callback_data` is stringified JSON-string that looks like `{t: type, d: data}` and have 64 character length limit (see [Telegram API docs](https://core.telegram.org/bots/api#inlinekeyboardbutton)).  
-Knowing it, your both `type` string and `data` must be at total less then **55** characters. API error (`error` event) will return otherwise.
+Knowing it, your both `type` string and `data` must be at total less then **55** characters. API error (`error` event) will called otherwise.  
+  
+**Also notice**: `Ant.add('callback_query', ...)` listner will handle only queries created with [Builders](#builders). For handling native queries (sent witout [Builders](#builders)) you need to use API events via `Ant.api.on('callback_query')`.
 
 
 ## Wildcards
