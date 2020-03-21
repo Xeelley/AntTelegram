@@ -72,9 +72,7 @@ class AntCore extends events_1.EventEmitter {
             this.checkStatus(data.from.id, 'successful_payment', data.successful_payment);
         });
         this.api.on('pre_checkout_query', (query) => {
-            this.api.answerPreCheckoutQuery(query.id, true, null).then(() => {
-                this.checkStatus(query.from.id, 'pre_checkout_query', query);
-            }).catch((err) => this.onError(query.from.id, err));
+            this.checkStatus(query.from.id, 'pre_checkout_query', query);
         });
         this.api.on('callback_query', (query) => {
             let data;
