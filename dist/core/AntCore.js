@@ -78,7 +78,7 @@ class AntCore extends events_1.EventEmitter {
             let data;
             try {
                 data = JSON.parse(query.data);
-                if (typeof data !== 'object' || !data.t || !data.d)
+                if (typeof data !== 'object' || !data.t)
                     throw new Error();
             }
             catch (_) {

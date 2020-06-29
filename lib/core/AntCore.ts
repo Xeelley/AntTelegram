@@ -100,7 +100,7 @@ export class AntCore extends EventEmitter {
             let data: { t: string, d: string };
             try {
                 data = JSON.parse(query.data);
-                if (typeof data !== 'object' || !data.t || !data.d) throw new Error()
+                if (typeof data !== 'object' || !data.t) throw new Error()
             } catch (_) {
                 data = null;
             }

@@ -32,7 +32,7 @@ export interface TelegramKeyboard {
  * Outer methods below
  */
 
-export function InlineButton(text: String, type: String, data: any): TelegramInlineButton {
+export function InlineButton(text: String, type: String, data?: any): TelegramInlineButton {
     return {
         text,
         callback_data: JSON.stringify({ t: type, d: data }),
