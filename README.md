@@ -19,6 +19,9 @@
         <img src="https://travis-ci.org/Xeelley/AntTelegram.svg?branch=master">
     </a>
 </p>
+<p align="center">
+  Also check out ants for other messengers: <a href="https://www.npmjs.com/package/ant-viber">AntViber</a>, <a href="https://www.npmjs.com/package/ant-messenger">AntMessenger</a>.
+</p>
 
 
 ## List of content ##
