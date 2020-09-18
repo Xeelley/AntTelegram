@@ -4,6 +4,11 @@ export interface AntTelegramConfig {
     setStatus: (chat_id: number, status: string) => Promise<any>;
     maskSeparator?: string;
     useWebhook?: Boolean;
+    callbackQueryAutoAnswer: ConfigCallbackQueryAutoAnswer;
+}
+interface ConfigCallbackQueryAutoAnswer {
+    enable: Boolean;
+    text?: string;
 }
 export interface Listeners {
     [key: string]: {
@@ -29,3 +34,4 @@ export declare type AntBasicListenerType = '*' | 'photo' | 'location' | 'text' |
 export declare type AntDirectListenerType = 'animation' | 'channel_chat_created' | 'delete_chat_photo' | 'group_chat_created' | 'left_chat_member' | 'migrate_from_chat_id' | 'migrate_to_chat_id' | 'new_chat_members' | 'new_chat_photo' | 'new_chat_title' | 'shipping_query' | 'inline_query' | 'edited_message' | 'edited_message_text' | 'edited_message_caption' | 'passport_data' | 'pinned_message' | 'supergroup_chat_created';
 export declare type AntListenerType = AntModifiedListenerType | AntDirectListenerType | AntBasicListenerType;
 export declare type AntTelegramEvent = 'error' | 'chat_error' | 'webhook_error' | 'polling_error' | 'Error';
+export {};

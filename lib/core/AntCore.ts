@@ -26,8 +26,9 @@ export class AntCore extends EventEmitter {
         
         if (!config.getStatus) throw new Error('Ant: config.getStatus not provided! This field is mandatory.');
         if (!config.setStatus) throw new Error('Ant: config.setStatus not provided! This field is mandatory.');
-        config.maskSeparator = config.maskSeparator || ':'; 
-        config.useWebhook    = config.useWebhook || false;
+        config.maskSeparator           = config.maskSeparator || ':'; 
+        config.useWebhook              = config.useWebhook || false;
+        config.callbackQueryAutoAnswer = config.callbackQueryAutoAnswer || { enable: true };
         this.config = config;
 
         this.api = new Telegram(token, { polling: !this.config.useWebhook });
@@ -105,11 +106,17 @@ export class AntCore extends EventEmitter {
                 data = null;
             }
             if (data) {
-                this.api.answerCallbackQuery(query.id, { show_alert: true }).then(() => {
+                if (this.config.callbackQueryAutoAnswer.enable) {
+                    this.api.answerCallbackQuery(query.id, this.config.callbackQueryAutoAnswer.text ? { text: this.config.callbackQueryAutoAnswer.text } : {}).then(() => {
+                        if (!!~Object.keys(this.botListeners.callback_query).indexOf(data.t)) {
+                            this.botListeners.callback_query[data.t](query.message.chat.id, data.d, query.message.message_id);
+                        }
+                    }).catch((err: Error) => this.onError(query.message.chat.id, err));
+                } else {
                     if (!!~Object.keys(this.botListeners.callback_query).indexOf(data.t)) {
                         this.botListeners.callback_query[data.t](query.message.chat.id, data.d, query.message.message_id);
                     }
-                }).catch((err: Error) => this.onError(query.message.chat.id, err));
+                }
             }
         });
         this.api.on('inline_query', (query: Telegram.InlineQuery) => {
