@@ -243,12 +243,14 @@ Ant.add('callback_query', 'gift', async (chat_id, data, message_id) => {
 Callback will get data from inline buttons with pointed type:  
 
 <img src="assets/chat_03.png">
+  
+Ant:Telegram automatically answer on callback queries via `Ant.api.answerInlineQuery` method ([API reference](https://core.telegram.org/bots/api#answerinlinequery)) to hide loading spinner from inline button. You should disable it via `callbackQueryAutoAnswer` [config](#config) value if you need to answer it on your own (for displaing toast notification as option). Also you can add notification text to auto-answer (no notifications by default).
+  
+`Ant.add('callback_query', ...)` listner will handle only queries created with [Builders](#builders). For handling native queries (sent witout [Builders](#builders)) you need to use API events via `Ant.api.on('callback_query')`.
 
-**Notice**: Ant:Telegram `Ant.Types.InlineKeyboard` builder add `callback_data` to message.  
+**Notice:** Ant:Telegram `Ant.Types.InlineKeyboard` builder add `callback_data` to message.  
 `callback_data` is stringified JSON-string that looks like `{t: type, d: data}` and have 64 character length limit (see [Telegram API docs](https://core.telegram.org/bots/api#inlinekeyboardbutton)).  
 Knowing it, your both `type` string and `data` must be at total less then **55** characters. API error (`error` event) will called otherwise.  
-  
-**Also notice**: `Ant.add('callback_query', ...)` listner will handle only queries created with [Builders](#builders). For handling native queries (sent witout [Builders](#builders)) you need to use API events via `Ant.api.on('callback_query')`.
 
 
 ## Wildcards
@@ -266,14 +268,16 @@ Ant.add('*', 'your_status', message => {
 
 
 ## Config ##
-Ant:Telegram init config contain next fields:
+Ant:Telegram init config contain next params:
 
-| field | type | description |
-|-------|------|-------------|
-| `setStatus` | | See [basic usage](#Basic-usage) 
-| `getStatus` | | See [basic usage](#Basic-usage) 
-| `maskSeparator` | `string` | See [masks](#Masks)
-| `useWebhook` | `boolean` | See [webhook and polling](#Webhook-and-Polling) 
+| field | type | default | description |
+|-------|------|----------|-------------|
+| `setStatus` | `Promise<any>` | _Required param_ | See [basic usage](#Basic-usage) 
+| `getStatus` | `Promise<String>` | _Required param_ | See [basic usage](#Basic-usage) 
+| `maskSeparator` | `string` | `:` | See [masks](#Masks)
+| `useWebhook` | `boolean` | `false` | See [webhook and polling](#Webhook-and-Polling) 
+| `callbackQueryAutoAnswer.enable` | `boolean` | `true` | See [Inline buttons](#inline-buttons-callback-data-handling)
+| `callbackQueryAutoAnswer.text` | `string` | `null` | See [Inline buttons](#inline-buttons-callback-data-handling)
 
 
 
