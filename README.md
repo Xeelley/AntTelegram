@@ -148,6 +148,12 @@ First argument is user interaction type, second - our status, third - callback.
 Callback will invoke every time when user with this status send photo to bot.  
 Full list of available types and callbacks you can check [here](docs/event-types.md).
 
+Or add native listener:
+```js
+Ant.native('my_status', message => { ... })
+```
+Native listener pass to callback parsed Telegram API response for any type of message.
+
 ### Commands
 
 Add command handlers using `Ant.command`:
@@ -198,8 +204,12 @@ await Ant.status(chat_id, 'buy:fruit:apple')
 Provided status has 3 levels: action (`buy`), category (`fruit`), item (`apple`) and can be used during user interaction  with shopping cart.  
 You not need to set listeners using `Ant.add` for each item on third level. You can use mask (`*`):
 ```js
-// Mask value (item, in our case) will be provided as third callback parameter.
+// Mask value (item, in our case) will be provided as third Ant.add callback parameter or second Ant.native parameter
 Ant.add('message', 'buy:fruit:*', (chat_id, text, item) => {
+    console.log(item) // apple
+})
+// Or
+Ant.native('buy:fruit:*', (message, item) => {
     console.log(item) // apple
 })
 ```
@@ -265,6 +275,7 @@ Ant.add('*', 'your_status', message => {
     console.log(message) // Telegram.Message here!
 })
 ```
+**Notice:** from `v0.1.9` Ant:Telegram contains `Ant.native` method which do the same (allow to get message of any type for passed status).
 
 
 ## Config ##
