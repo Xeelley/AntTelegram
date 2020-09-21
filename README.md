@@ -275,7 +275,7 @@ Ant.add('*', 'your_status', message => {
     console.log(message) // Telegram.Message here!
 })
 ```
-**Notice:** from `v0.1.9` Ant:Telegram contains `Ant.native` method which do the same (allow to get message of any type for passed status).
+**Notice:** from `v0.1.9` Ant:Telegram contains `Ant.native` method which do the same (allow to get message of any type for passed status) but with [wildcards](#Wildcards) support.
 
 
 ## Config ##
