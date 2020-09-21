@@ -16,6 +16,7 @@ export class AntCore extends EventEmitter {
     private config: T.AntTelegramConfig;
     
     protected botListeners: T.Listeners = {};
+    protected nativeListeners: T.NativeListeners = {};
     protected commands: T.Commands = {};
     protected liveLocationListeners: Function[] = [];
     protected startCommandListeners: T.StartCommandCallback[] = [];
@@ -75,6 +76,7 @@ export class AntCore extends EventEmitter {
 
     private addListeners() {
         this.api.on('message', (message: Telegram.Message) => {
+            this.checkStatusNative(message.chat.id, message);
             if (!message.text) return;
             const text      = message.text;
             const chatId    = message.chat.id;
@@ -179,6 +181,25 @@ export class AntCore extends EventEmitter {
                     const listener = Object.keys(this.botListeners[type])[i];
                     if (this.isMask(listener) && this.isMatch(status, listener)) {
                         return this.botListeners[type][listener](chat_id, data, this.isMatch(status, listener));
+                    }
+                }
+            }
+        })
+        .catch((err: Error) => this.onError(chat_id, err));
+    }
+
+    private checkStatusNative(chat_id: number, message: Telegram.Message) {
+        this.config.getStatus(chat_id)
+        .then(status => {
+            if (!status) return;
+
+            if (Object.keys(this.nativeListeners).includes(status)) {
+                return this.nativeListeners[status](message);
+            } else {
+                for (let i in Object.keys(this.nativeListeners)) {
+                    const listener = Object.keys(this.nativeListeners)[i];
+                    if (this.isMask(listener) && this.isMatch(status, listener)) {
+                        return this.nativeListeners[listener](message, this.isMatch(status, listener));
                     }
                 }
             }

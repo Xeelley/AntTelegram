@@ -9,6 +9,7 @@ class AntCore extends events_1.EventEmitter {
         super();
         this.Types = AntTypes;
         this.botListeners = {};
+        this.nativeListeners = {};
         this.commands = {};
         this.liveLocationListeners = [];
         this.startCommandListeners = [];
@@ -54,6 +55,7 @@ class AntCore extends events_1.EventEmitter {
     }
     addListeners() {
         this.api.on('message', (message) => {
+            this.checkStatusNative(message.chat.id, message);
             if (!message.text)
                 return;
             const text = message.text;
@@ -158,6 +160,25 @@ class AntCore extends events_1.EventEmitter {
                     const listener = Object.keys(this.botListeners[type])[i];
                     if (this.isMask(listener) && this.isMatch(status, listener)) {
                         return this.botListeners[type][listener](chat_id, data, this.isMatch(status, listener));
+                    }
+                }
+            }
+        })
+            .catch((err) => this.onError(chat_id, err));
+    }
+    checkStatusNative(chat_id, message) {
+        this.config.getStatus(chat_id)
+            .then(status => {
+            if (!status)
+                return;
+            if (Object.keys(this.nativeListeners).includes(status)) {
+                return this.nativeListeners[status](message);
+            }
+            else {
+                for (let i in Object.keys(this.nativeListeners)) {
+                    const listener = Object.keys(this.nativeListeners)[i];
+                    if (this.isMask(listener) && this.isMatch(status, listener)) {
+                        return this.nativeListeners[listener](message, this.isMatch(status, listener));
                     }
                 }
             }

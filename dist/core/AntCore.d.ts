@@ -7,6 +7,7 @@ export declare class AntCore extends EventEmitter {
     Types: typeof AntTypes;
     private config;
     protected botListeners: T.Listeners;
+    protected nativeListeners: T.NativeListeners;
     protected commands: T.Commands;
     protected liveLocationListeners: Function[];
     protected startCommandListeners: T.StartCommandCallback[];
@@ -20,6 +21,7 @@ export declare class AntCore extends EventEmitter {
     private addDirectListeners;
     private addBasicListeners;
     private checkStatus;
+    private checkStatusNative;
     private liveLocationHandler;
     private startCommandHandler;
     private onError;

@@ -56,7 +56,7 @@ export class AntTelegram extends AntCore {
 
     public add(type: '*', status: string, listener: (message: Telegram.Message) => any): void;
 
-    public add(type: T.AntListenerType, status: any, method?: any) {
+    public add(type: T.AntListenerType, status: string | Function, method?: Function) {
     
         if (type === 'live_location' && typeof status === 'function') {
             this.liveLocationListeners.push(status);
@@ -64,6 +64,10 @@ export class AntTelegram extends AntCore {
             if (!this.botListeners[type]) this.botListeners[type] = {};
             this.botListeners[type][status.toString()] = method;
         }
+    }
+
+    public native(status: string, method: (message: Telegram.Message, mask?: string) => any) {
+        this.nativeListeners[status.toString()] = method;
     }
 
     public sendMessage(chatId: number | string, text: string, options?: TelegramBot.SendMessageOptions | TelegramKeyboard) {

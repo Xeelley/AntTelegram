@@ -15,6 +15,9 @@ export interface Listeners {
         [key in string]: Function;
     };
 }
+export interface NativeListeners {
+    [key: string]: Function;
+}
 export interface Commands {
     [key: string]: Function;
 }
