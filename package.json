@@ -28,8 +28,8 @@
   "homepage": "https://github.com/Xeelley/AntTelegram#readme",
   "dependencies": {
     "@types/node": "^11.13.6",
-    "@types/node-telegram-bot-api": "^0.40.2",
+    "@types/node-telegram-bot-api": "^0.50.3",
     "lodash": ">=4.17.13",
-    "node-telegram-bot-api": "^0.40.0"
+    "node-telegram-bot-api": "^0.50.0"
   }
 }
