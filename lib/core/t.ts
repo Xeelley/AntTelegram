@@ -6,7 +6,7 @@ export interface AntTelegramConfig {
     setStatus: (chat_id: number, status: string) => Promise<any>;
     maskSeparator?: string;
     useWebhook?: Boolean;
-    callbackQueryAutoAnswer: ConfigCallbackQueryAutoAnswer;
+    callbackQueryAutoAnswer?: ConfigCallbackQueryAutoAnswer;
 }
 
 interface ConfigCallbackQueryAutoAnswer {

@@ -34,7 +34,6 @@ export class AntCore extends EventEmitter {
 
         this.api = new Telegram(token, { polling: !this.config.useWebhook });
 
-
         this.api.on('error',         (err: Error) => {
             this.emit('error', err);
             this.emit('Error', err);
