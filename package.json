@@ -29,7 +29,7 @@
   "dependencies": {
     "@types/node": "^11.13.6",
     "@types/node-telegram-bot-api": "^0.50.3",
-    "lodash": ">=4.17.13",
+    "lodash": ">=4.17.19",
     "node-telegram-bot-api": "^0.50.0"
   }
 }
