@@ -27,15 +27,15 @@ export interface Commands {
 }
 
 export interface ListenerCallback {
-    (user_id: string | number, data: any, mask?: string): void;
+    (user_id: number, data: any, mask?: string): void;
 }
 
 export interface CommandCallback {
-    (user_id: string | number, params: { [index: string]: string }, message: Telegram.Message): void;
+    (user_id: number, params: { [index: string]: string }, message: Telegram.Message): void;
 }
 
 export interface StartCommandCallback {
-    (user_id: string | number, value: string, message: Telegram.Message): void;
+    (user_id: number, value: string, message: Telegram.Message): void;
 }
 
 export type AntModifiedListenerType = 

@@ -22,15 +22,15 @@ export interface Commands {
     [key: string]: Function;
 }
 export interface ListenerCallback {
-    (user_id: string | number, data: any, mask?: string): void;
+    (user_id: number, data: any, mask?: string): void;
 }
 export interface CommandCallback {
-    (user_id: string | number, params: {
+    (user_id: number, params: {
         [index: string]: string;
     }, message: Telegram.Message): void;
 }
 export interface StartCommandCallback {
-    (user_id: string | number, value: string, message: Telegram.Message): void;
+    (user_id: number, value: string, message: Telegram.Message): void;
 }
 export declare type AntModifiedListenerType = 'message' | 'callback_query' | 'live_location' | 'pre_checkout_query' | 'successful_payment';
 export declare type AntBasicListenerType = '*' | 'photo' | 'location' | 'text' | 'contact' | 'audio' | 'document' | 'game' | 'invoice' | 'sticker' | 'video' | 'video_note' | 'voice';

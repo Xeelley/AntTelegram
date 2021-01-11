@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { EventEmitter } from 'events';
 import * as Telegram from 'node-telegram-bot-api';
 import * as AntTypes from './types';

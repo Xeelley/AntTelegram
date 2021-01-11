@@ -42,5 +42,5 @@ export declare class AntTelegram extends AntCore {
     add(type: 'voice', status: string, listener: (chat_id: number, voice: Telegram.Voice, mask?: string) => any): void;
     add(type: '*', status: string, listener: (message: Telegram.Message) => any): void;
     native(status: string, method: (message: Telegram.Message, mask?: string) => any): void;
-    sendMessage(chatId: number | string, text: string, options?: TelegramBot.SendMessageOptions | TelegramKeyboard): any;
+    sendMessage(chat_id: number, text: string, options?: TelegramBot.SendMessageOptions | TelegramKeyboard): Promise<Telegram.Message>;
 }

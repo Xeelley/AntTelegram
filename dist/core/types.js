@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.InlineKeyboard = exports.Keyboard = exports.RequestContactButton = exports.InlineButton = void 0;
 function InlineButton(text, type, data) {
     return {
         text,

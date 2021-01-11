@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.CommandParser = void 0;
 class CommandParser {
     static parse(text) {
         if (text.indexOf('?') === -1)

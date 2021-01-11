@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.AntCore = void 0;
 const events_1 = require("events");
 const Telegram = require("node-telegram-bot-api");
 const AntTypes = require("./types");

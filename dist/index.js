@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.AntTelegram = void 0;
 process.env.NTBA_FIX_319 = '1';
 const AntCore_1 = require("./core/AntCore");
 class AntTelegram extends AntCore_1.AntCore {
@@ -19,8 +20,8 @@ class AntTelegram extends AntCore_1.AntCore {
     native(status, method) {
         this.nativeListeners[status.toString()] = method;
     }
-    sendMessage(chatId, text, options) {
-        return this.api.sendMessage(chatId, text, options);
+    sendMessage(chat_id, text, options) {
+        return this.api.sendMessage(chat_id, text, options);
     }
 }
 exports.AntTelegram = AntTelegram;

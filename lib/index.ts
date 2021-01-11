@@ -70,8 +70,8 @@ export class AntTelegram extends AntCore {
         this.nativeListeners[status.toString()] = method;
     }
 
-    public sendMessage(chatId: number | string, text: string, options?: TelegramBot.SendMessageOptions | TelegramKeyboard) {
+    public sendMessage(chat_id: number, text: string, options?: TelegramBot.SendMessageOptions | TelegramKeyboard) {
         // @ts-ignore
-        return this.api.sendMessage(chatId, text, options);
+        return this.api.sendMessage(chat_id, text, options);
     }
 }
