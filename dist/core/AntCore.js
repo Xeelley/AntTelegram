@@ -64,6 +64,9 @@ class AntCore extends events_1.EventEmitter {
             const messageId = message.message_id;
             const command = text.indexOf('?') !== -1 ?
                 text.slice(0, text.indexOf('?')) : text;
+            console.log(message);
+            console.log(text);
+            console.log(command);
             if (Object.keys(this.commands).includes(command)) {
                 return this.commands[command](chatId, CommandParser_1.CommandParser.parse(text), message);
             }
