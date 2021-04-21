@@ -56,6 +56,8 @@ class AntCore extends events_1.EventEmitter {
     }
     addListeners() {
         this.api.on('message', (message) => {
+            if (message.chat.id < 0)
+                return;
             this.checkStatusNative(message.chat.id, message);
             if (!message.text)
                 return;
@@ -64,9 +66,6 @@ class AntCore extends events_1.EventEmitter {
             const messageId = message.message_id;
             const command = text.indexOf('?') !== -1 ?
                 text.slice(0, text.indexOf('?')) : text;
-            console.log(message);
-            console.log(text);
-            console.log(command);
             if (Object.keys(this.commands).includes(command)) {
                 return this.commands[command](chatId, CommandParser_1.CommandParser.parse(text), message);
             }
@@ -76,6 +75,8 @@ class AntCore extends events_1.EventEmitter {
             this.checkStatus(chatId, 'message', text, messageId);
         });
         this.api.on('successful_payment', (data) => {
+            if (data.chat.id < 0)
+                return;
             this.checkStatus(data.from.id, 'successful_payment', data.successful_payment);
         });
         this.api.on('pre_checkout_query', (query) => {
@@ -127,6 +128,8 @@ class AntCore extends events_1.EventEmitter {
         ];
         types.forEach((type) => {
             this.api.on(type, (message) => {
+                if (message.chat.id < 0)
+                    return;
                 const chatId = message.chat ? message.chat.id : message.from.id;
                 if (chatId)
                     this.checkStatus(chatId, type, message);
@@ -140,6 +143,8 @@ class AntCore extends events_1.EventEmitter {
         ];
         types.forEach(type => {
             this.api.on(type, (message) => {
+                if (message.chat.id < 0)
+                    return;
                 const chatId = message.chat.id;
                 const data = type !== '*' ? message[type] : null;
                 this.checkStatus(chatId, type, data, message);

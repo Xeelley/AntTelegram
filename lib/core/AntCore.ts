@@ -75,6 +75,7 @@ export class AntCore extends EventEmitter {
 
     private addListeners() {
         this.api.on('message', (message: Telegram.Message) => {
+            if (message.chat.id < 0) return /// Skip non-P2P
             this.checkStatusNative(message.chat.id, message);
             if (!message.text) return;
             const text      = message.text;
@@ -93,6 +94,7 @@ export class AntCore extends EventEmitter {
             this.checkStatus(chatId, 'message', text, messageId);
         });
         this.api.on('successful_payment', (data: Telegram.Message) => {
+            if (data.chat.id < 0) return /// Skip non-P2P
             this.checkStatus(data.from.id, 'successful_payment', data.successful_payment);
         });
         this.api.on('pre_checkout_query', (query: Telegram.PreCheckoutQuery) => {
@@ -141,6 +143,7 @@ export class AntCore extends EventEmitter {
         ]; 
         types.forEach((type: any) => {
             this.api.on(type, (message: Telegram.Message) => {
+                if (message.chat.id < 0) return /// Skip non-P2P
                 const chatId = message.chat ? message.chat.id : message.from.id;
                 if (chatId) this.checkStatus(chatId, type, message);
             });
@@ -154,6 +157,7 @@ export class AntCore extends EventEmitter {
         ];
         types.forEach(type => {
             this.api.on(<any>type, (message: Telegram.Message) => {
+                if (message.chat.id < 0) return /// Skip non-P2P
                 const chatId = message.chat.id;
                 const data = type !== '*' ? message[type] : null;
                 this.checkStatus(chatId, type, data, message);
