@@ -60,8 +60,8 @@ About:
 Ant:Telegram require to provide 2 basic status managment async methods: for getting status to user by telegram `chat_id`, and for setting it.  
 Feel free to chose storing way (architecture, database etc.). We require next interfaces only:
 ```ts
-getStatus(chat_id: Number): Promise<String>;
-setStatus(chat_id: Number, status: String): Promise<any>;
+getStatus(chat_id: number): Promise<string>;
+setStatus(chat_id: number, status: string): Promise<any>;
 ``` 
 
 **Notice**: `getStatus` must returns `null` or `undefined` when called for user for a first time (when user not exist and status not found).
@@ -109,8 +109,8 @@ See `Ant.api`
 
 All api methods like 
 ```ts
-Ant.api.sendMessage(chat_id: Number, text: String, options? TelegramOptions): Promise;
-Ant.api.deleteChatStickerSet(chat_id: Number, form: TelegramForm): Promise;
+Ant.api.sendMessage(chat_id: number, text: string, options? TelegramOptions): Promise;
+Ant.api.deleteChatStickerSet(chat_id: number, form: TelegramForm): Promise;
 ``` 
 ... and so on. See full list in [node-telegram-bot-api](https://www.npmjs.com/package/node-telegram-bot-api) dependency.
 
@@ -284,7 +284,7 @@ Ant:Telegram init config contain next params:
 | field | type | default | description |
 |-------|------|----------|-------------|
 | `setStatus` | `Promise<any>` | _Required param_ | See [basic usage](#Basic-usage) 
-| `getStatus` | `Promise<String>` | _Required param_ | See [basic usage](#Basic-usage) 
+| `getStatus` | `Promise<string>` | _Required param_ | See [basic usage](#Basic-usage) 
 | `maskSeparator` | `string` | `:` | See [masks](#Masks)
 | `useWebhook` | `boolean` | `false` | See [webhook and polling](#Webhook-and-Polling) 
 | `callbackQueryAutoAnswer.enable` | `boolean` | `true` | See [Inline buttons](#inline-buttons-callback-data-handling)

@@ -14,11 +14,11 @@ class AntTelegram extends AntCore_1.AntCore {
         else {
             if (!this.botListeners[type])
                 this.botListeners[type] = {};
-            this.botListeners[type][status.toString()] = method;
+            this.botListeners[type][status] = method;
         }
     }
     native(status, method) {
-        this.nativeListeners[status.toString()] = method;
+        this.nativeListeners[status] = method;
     }
     sendMessage(chat_id, text, options) {
         return this.api.sendMessage(chat_id, text, options);

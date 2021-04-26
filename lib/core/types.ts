@@ -1,10 +1,10 @@
 export interface TelegramInlineButton {
-    text: String;
-    callback_data: String;
+    text: string;
+    callback_data: string;
 }
 
 export interface TelegramRequestContactButton {
-    text: String;
+    text: string;
     request_contact?: Boolean;
 }
 
@@ -12,7 +12,7 @@ type TelegramParseMode = 'Markdown' | 'HTML' | 'None';
 
 type TelegramInlineKeyboardMarkup = TelegramInlineButton[][];
 
-type TelegramKeyboardMarkup = String[][];
+type TelegramKeyboardMarkup = string[][];
 
 export interface TelegramReplyMarkup {
     keyboard?: TelegramKeyboardMarkup;
@@ -32,14 +32,14 @@ export interface TelegramKeyboard {
  * Outer methods below
  */
 
-export function InlineButton(text: String, type: String, data?: any): TelegramInlineButton {
+export function InlineButton(text: string, type: string, data?: any): TelegramInlineButton {
     return {
         text,
         callback_data: JSON.stringify({ t: type, d: data }),
     }
 }
 
-export function RequestContactButton(text: String): TelegramRequestContactButton {
+export function RequestContactButton(text: string): TelegramRequestContactButton {
     return { 
         text,
         request_contact: true,

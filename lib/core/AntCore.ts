@@ -221,16 +221,16 @@ export class AntCore extends EventEmitter {
         this.startCommandListeners.forEach(listener => listener(message.chat.id, message.text.slice(7), message));
     }
 
-    private onError(id: String | Number, err: Error) {
+    private onError(id: string | number, err: Error) {
         this.emit('chat_error', id, err);
         this.emit('Error', Object.assign(err, { chat_id: id }));
     }
 
-    private isMask(mask: String): Boolean {
+    private isMask(mask: string): Boolean {
         return mask.split(this.config.maskSeparator).includes('*');
     }
 
-    private isMatch(status: String, mask: String) {
+    private isMatch(status: string, mask: string) {
         if (mask === '*') return status;
 
         const statusLevels = status.split(this.config.maskSeparator);
